@@ -1,0 +1,106 @@
+[15-May-2019 08:38:39 Europe/Berlin] 0::login.php:107:[before upgrade] count(): Parameter must be an array or an object that implements Countable
+[15-May-2019 09:00:13 Europe/Berlin] <b>DATABASE ERROR :</b> could not get validate user login for admin<br>error code : 1146<br>error message : Table 'frontaccounting.users' doesn't exist<br>sql that failed was : SELECT * FROM users WHERE user_id = 'admin' AND password='5f4dcc3b5aa765d61d8327deb882cf99'<br><br><br>
+[15-May-2019 10:27:16 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[15-May-2019 10:27:16 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[15-May-2019 10:27:16 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[15-May-2019 10:28:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[15-May-2019 10:28:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[15-May-2019 10:28:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[16-May-2019 08:34:40 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[16-May-2019 08:34:40 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[16-May-2019 08:34:40 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[16-May-2019 08:36:43 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[16-May-2019 08:36:43 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[16-May-2019 08:36:43 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 08:29:03 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 08:29:03 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 08:29:03 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 08:31:04 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 08:31:04 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 08:31:04 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 08:54:20 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 08:54:20 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 08:54:20 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 09:01:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 09:01:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 09:01:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 12:00:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 12:00:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 12:00:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[17-May-2019 12:04:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[17-May-2019 12:04:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[17-May-2019 12:04:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[18-May-2019 07:54:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[18-May-2019 07:54:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[18-May-2019 07:54:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[18-May-2019 07:56:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[18-May-2019 07:56:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[18-May-2019 07:56:28 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[18-May-2019 10:15:27 Europe/Berlin] 0:admin:po_receive_items.php:261: Object of class purch_order could not be converted to string
+[20-May-2019 07:52:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[20-May-2019 07:52:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[20-May-2019 07:52:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[20-May-2019 07:59:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[20-May-2019 07:59:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[20-May-2019 07:59:29 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[20-May-2019 07:59:44 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[20-May-2019 07:59:44 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[20-May-2019 07:59:44 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[21-May-2019 09:16:33 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[21-May-2019 09:16:33 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[21-May-2019 09:16:33 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[21-May-2019 09:16:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[21-May-2019 09:16:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[21-May-2019 09:16:46 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[22-May-2019 08:05:30 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[22-May-2019 08:05:31 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[22-May-2019 08:05:31 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[22-May-2019 08:06:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[22-May-2019 08:06:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[22-May-2019 08:06:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[22-May-2019 08:06:36 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[22-May-2019 08:06:36 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[22-May-2019 08:06:36 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[22-May-2019 13:25:08 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[22-May-2019 13:25:09 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[22-May-2019 13:25:09 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[24-May-2019 11:25:00 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[24-May-2019 11:25:00 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[24-May-2019 11:25:00 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[24-May-2019 11:26:06 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[24-May-2019 11:26:06 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[24-May-2019 11:26:06 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[27-May-2019 08:49:45 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[27-May-2019 08:49:45 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[27-May-2019 08:49:45 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[27-May-2019 08:50:30 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[27-May-2019 08:50:30 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[27-May-2019 08:50:30 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[28-May-2019 08:19:57 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[28-May-2019 08:19:57 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[28-May-2019 08:19:57 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[30-May-2019 12:44:55 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[30-May-2019 12:44:55 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[30-May-2019 12:44:55 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[31-May-2019 07:42:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[31-May-2019 07:42:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[31-May-2019 07:42:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[31-May-2019 07:44:13 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[31-May-2019 07:44:13 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[31-May-2019 07:44:13 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[11-Jun-2019 13:53:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[11-Jun-2019 13:53:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[11-Jun-2019 13:53:14 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[11-Jun-2019 14:05:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[11-Jun-2019 14:05:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[11-Jun-2019 14:05:38 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[11-Jun-2019 14:30:17 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[11-Jun-2019 14:30:17 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[11-Jun-2019 14:30:17 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[20-Jun-2019 13:30:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[20-Jun-2019 13:30:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[20-Jun-2019 13:30:27 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[20-Jun-2019 13:44:47 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[20-Jun-2019 13:44:47 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[20-Jun-2019 13:44:47 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[20-Jun-2019 13:46:11 Europe/Berlin] Rounding error 0.01 encountered for trans_type:10,trans_no:1

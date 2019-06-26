@@ -1,0 +1,78 @@
+[01-Jul-2016 21:54:53 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on a non-object in /home/csmdsegi/public_html/pos/app/models/Site.php on line 311
+[01-Nov-2017 14:47:30 Asia/Kuala_Lumpur] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[01-Nov-2017 14:47:33 Asia/Kuala_Lumpur] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[01-Nov-2017 14:47:37 Asia/Kuala_Lumpur] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[03-Nov-2017 14:55:20 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 56
+[03-Nov-2017 14:55:35 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 56
+[03-Nov-2017 14:56:23 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 57
+[03-Nov-2017 14:56:36 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 57
+[03-Nov-2017 14:56:39 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 57
+[03-Nov-2017 14:57:49 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '--' (T_DEC) in /home/magmaccc/public_html/pos/themes/default/views/settings/add_warehouse.php on line 57
+[03-Nov-2017 15:07:03 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:07:11 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:07:22 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:08:47 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:09:15 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:13:14 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:17:50 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:18:08 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:18:59 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:19:52 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:23:52 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:24:38 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:25:04 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:27:41 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:29:48 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 15:30:46 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 15:32:16 Asia/Kuala_Lumpur] PHP Fatal error:  Call to undefined method Datatables::joins() in /home/magmaccc/public_html/pos/app/controllers/System_settings.php on line 1967
+[03-Nov-2017 15:34:31 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:35:48 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 15:36:57 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 15:40:57 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 15:41:21 Asia/Kuala_Lumpur] PHP Fatal error:  Call to undefined method Datatables::query() in /home/magmaccc/public_html/pos/app/controllers/System_settings.php on line 1964
+[03-Nov-2017 15:41:41 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 15:42:24 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:36:53 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:16 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:17 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:18 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:20 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:21 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:21 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:22 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:22 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:24 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:25 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:25 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:26 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 17:37:50 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 20:25:11 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 20:27:23 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 367
+[03-Nov-2017 20:28:41 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function result_array() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:30:02 Asia/Kuala_Lumpur] PHP Warning:  Unterminated comment starting line 657 in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 657
+[03-Nov-2017 20:30:02 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 483
+[03-Nov-2017 20:30:24 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 483
+[03-Nov-2017 20:30:48 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 483
+[03-Nov-2017 20:33:41 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 483
+[03-Nov-2017 20:36:02 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 485
+[03-Nov-2017 20:36:30 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 485
+[03-Nov-2017 20:37:03 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:37:05 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:41:29 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:41:34 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:43:29 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[03-Nov-2017 20:43:56 Asia/Kuala_Lumpur] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/libraries/Datatables.php on line 438
+[08-Nov-2017 18:46:59 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[08-Nov-2017 18:49:24 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[08-Nov-2017 18:49:36 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[09-Nov-2017 11:36:39 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[09-Nov-2017 11:37:00 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[09-Nov-2017 11:37:13 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[09-Nov-2017 11:37:20 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[09-Nov-2017 11:37:52 Asia/Karachi] PHP Fatal error:  Call to a member function num_rows() on boolean in /home/magmaccc/public_html/pos/app/models/Transfers_model.php on line 204
+[16-Jan-2018 14:01:47 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[16-Jan-2018 14:03:33 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[16-Jan-2018 14:03:35 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[16-Jan-2018 14:03:37 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[16-Jan-2018 14:04:12 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
+[16-Jan-2018 14:04:29 Asia/Karachi] PHP Fatal error:  session_start(): Failed to initialize storage module: user (path: sessions) in /home/magmaccc/public_html/pos/system/libraries/Session/Session.php on line 140
