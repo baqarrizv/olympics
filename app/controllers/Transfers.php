@@ -26,6 +26,8 @@ class Transfers extends MY_Controller
         $this->data['logo'] = true;
     }
 
+//Faizan's Work 
+
     function index()
     {
         $this->sma->checkPermissions();
@@ -33,9 +35,33 @@ class Transfers extends MY_Controller
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
 
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('transfers')));
+
+
+        $this->load->model('Products_model', 'products_model');
+        $this->data['transfer'] =$this->products_model->getTransferData();
+
+
+         // $query = $this->db->( "SELECT * from sma_fin_stock_moves");
+        
+         // print('<pre>');
+         // print_r($this->data['transfer']);
+
         $meta = array('page_title' => lang('transfers'), 'bc' => $bc);
         $this->page_construct('transfers/index', $meta, $this->data);
     }
+
+
+
+    // function index()
+    // {
+    //     $this->sma->checkPermissions();
+
+    //     $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+
+    //     $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('transfers')));
+    //     $meta = array('page_title' => lang('transfers'), 'bc' => $bc);
+    //     $this->page_construct('transfers/index', $meta, $this->data);
+    // }
 
     function getTransfers()
     {

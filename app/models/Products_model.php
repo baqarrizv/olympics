@@ -20,11 +20,14 @@ class Products_model extends CI_Model
         return FALSE;
     }
 
+
+// Faizan's Worrk
     public function getProducts()
     {
 
-        $query = "SELECT sma_fin_stock_master.stock_id, sma_fin_stock_master.description, sma_fin_stock_master.units, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id  GROUP BY sma_fin_stock_master.stock_id";
+        $query = "SELECT sma_fin_stock_master.stock_id, sma_fin_stock_master.description, sma_fin_stock_master.units, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total ,FORMAT(SUM(sma_fin_sales_order_details.quantity - sma_fin_sales_order_details.qty_sent),2) as booked FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id LEFT JOIN sma_fin_sales_order_details ON sma_fin_sales_order_details.stk_code = sma_fin_stock_master.stock_id  GROUP BY sma_fin_stock_master.stock_id";
         
+        // SELECT stk_code, sum(quantity-qty_sent) FROM `sma_fin_sales_order_details` group by stk_code
 
         $q = $this->db->query($query);
 
@@ -36,6 +39,49 @@ class Products_model extends CI_Model
         }
         return FALSE;
     }
+
+
+
+
+    public function getTransferData()
+    {
+
+        $query = "SELECT sma_fin_stock_moves.* ,sma_fin_stock_master.stock_id,sma_fin_stock_master.description from sma_fin_stock_moves left join sma_fin_stock_master on sma_fin_stock_master.stock_id = sma_fin_stock_moves.stock_id where sma_fin_stock_moves.type = '16' order by sma_fin_stock_moves.trans_id desc";
+        
+        // SELECT stk_code, sum(quantity-qty_sent) FROM `sma_fin_sales_order_details` group by stk_code
+
+        $q = $this->db->query($query);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+
+
+    //  public function getProducts()
+    // {
+
+    //     $query = "SELECT sma_fin_stock_master.stock_id, sma_fin_stock_master.description, sma_fin_stock_master.units, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id  GROUP BY sma_fin_stock_master.stock_id";
+
+    //     $q = $this->db->query($query);
+
+    //     if ($q->num_rows() > 0) {
+    //         foreach (($q->result()) as $row) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     }
+    //     return FALSE;
+    // }
+
+
+
+    // end
 
     public function getSpecificByLoc($id, $loc)
     {

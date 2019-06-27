@@ -149,11 +149,17 @@
                         </tr>
                         </tbody>
                         <tfoot class="dtFilter">
+
+                    <?php 
+                    $i=0;
+                    foreach ($transfer as $t) {
+                        $i++;
+                        ?>
                         <tr class="active">
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th><?php echo $i; ?></th>
+                            <th><?php echo $t->description; ?></th>
+                            <th><?php echo $t->tran_date; ?></th>
+                            <th><?php echo $t->reference; ?></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -166,6 +172,9 @@
                             <th></th>
                             <th style="width:100px; text-align: center;"><?= lang("actions"); ?></th>
                         </tr>
+                        <?php
+                    } ?>
+               
                         </tfoot>
                     </table>
                 </div>
