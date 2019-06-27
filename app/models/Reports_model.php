@@ -39,6 +39,23 @@ class Reports_model extends CI_Model
         return FALSE;
     }
 
+    public function get_transfer_report()
+    {
+
+        $sql = "SELECT move.*, item.description, item.mb_flag, item.units, stock.location_name, log.* FROM sma_fin_stock_moves move RIGHT JOIN sma_fin_locations stock ON stock.loc_code=move.loc_code RIGHT JOIN sma_fin_stock_master item ON move.stock_id = item.stock_id LEFT JOIN sma_transaction_logs log ON log.stock_moves_id = move.trans_id WHERE move.type = 16 ORDER BY trans_id";
+
+
+        $q = $this->db->query($sql);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
     public function getPurchases()
     {
         $this->db->select('transaction_logs.*, stock.description')

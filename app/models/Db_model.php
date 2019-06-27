@@ -49,6 +49,17 @@ class Db_model extends CI_Model
         // return db_query($sql, "cannot get tax types as array");
     }
 
+    public function getCurrStock($location, $product)
+    {
+        
+        $this->db->select("SUM(qty) as qty");
+        $this->db->where('loc_code', $location);
+        $this->db->where('stock_id', $product);
+        return $this->db->get('fin_stock_moves')->row_array();
+        
+
+    }
+
     public function write_customer_trans($trans_type, $trans_no, $debtor_no, $BranchNo,
     $date_, $reference, $Total, $discount=0, $Tax=0, $Freight=0, $FreightTax=0,
     $sales_type=0, $order_no=0, $ship_via=0, $due_date="",

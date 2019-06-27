@@ -58,24 +58,13 @@ class Reports extends MY_Controller
        
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('reports'), 'page' => lang('reports')), array('link' => '#', 'page' => lang('Transfer Report')));
         $meta = array('page_title' => lang('Transfer Report'), 'bc' => $bc);
+        $this->data['transfers'] = $this->reports_model->get_transfer_report();
+
+
         $this->page_construct('reports/transfer', $meta, $this->data);
     }
 
     
-
-    public function getTransferReport()
-    {
-        $this->load->library('datatables');
-
-        $this->datatables
-        ->select("stock.description, stock.units, loc.location_name, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as qty, sma_fin_stock_moves.tran_date, sma_fin_stock_moves.reference")
-            ->from('sma_fin_stock_moves')
-            ->join('sma_fin_locations loc', 'loc.loc_code= sma_fin_stock_moves.loc_code', 'left')
-            ->join('sma_fin_stock_master stock', 'stock.stock_id=sma_fin_stock_moves.stock_id', 'left')
-            ->group_by('sma_fin_stock_moves.stock_id, , sma_fin_stock_moves.loc_code');
-
-        echo $this->datatables->generate();
-    }
 
     public function getStockReport()
     {
@@ -86,6 +75,7 @@ class Reports extends MY_Controller
             ->from('sma_fin_stock_moves')
             ->join('sma_fin_locations loc', 'loc.loc_code= sma_fin_stock_moves.loc_code', 'left')
             ->join('sma_fin_stock_master stock', 'stock.stock_id=sma_fin_stock_moves.stock_id', 'left')
+           
             ->group_by('sma_fin_stock_moves.stock_id, , sma_fin_stock_moves.loc_code');
 
         echo $this->datatables->generate();
