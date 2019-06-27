@@ -1225,8 +1225,7 @@ class Products extends MY_Controller
     {
         // $this->sma->checkPermissions();
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
-        $this->data['action'] = $action;
-
+        
         $this->load->model('Products_model', 'products_model');
         $this->data['dip_data'] = $this->products_model->getAllDip();
 
@@ -1250,7 +1249,7 @@ class Products extends MY_Controller
         $this->form_validation->set_rules('reference', lang("reference"), 'required');
 
         if ($this->form_validation->run() == true) {
-
+            
 
             $this->load->model("Purchases_model");
             $this->load->model("Db_model");
@@ -1263,6 +1262,10 @@ class Products extends MY_Controller
             $location = $this->input->post("silo");
             $date_ = date('Y-m-d');
             $reference = $this->input->post("reference");
+            $loss_nat = $this->input->post("loss_nat");
+            $loss_factor = $this->input->post("loss_factor");
+            $loss_mton = $this->input->post("loss_mton");
+            $current_stock = $this->input->post("current_stock");
 
             if ($reference == "") {
                 $reference = "auto";
@@ -1277,19 +1280,20 @@ class Products extends MY_Controller
             $map = round($map_cal/$nat);
 
             $inv_value = $map * $f_qty;
-            $trans_value = $map * $nat;
+            $trans_value = $map * $nat;            
 
             $adj_id = $this->Transfers_model->get_next_trans_no(17);
 
             $stock_move_id = $this->Transfers_model->add_stock_move(17, $product, $adj_id, $location,
-            $date_, $reference, $f_qty, $material_cost);
+            $date_, $reference, $loss_factor, $material_cost);
+
             
             $data = array(
                 'product_id' => $product,
                 'stock_moves_id' => $stock_move_id,
                 'supplier_id' => 0,
                 'trans_type' => 'Daily Dip',
-                'nat_qty' => $nat,
+                'nat_qty' => $nat, 
                 'f_qty' => $f_qty,
                 'f_value' => 85,
                 'm_ton_qty' => $this->input->post("mton"),
@@ -1301,7 +1305,30 @@ class Products extends MY_Controller
             );
 
             $log = $this->Purchases_model->saveLogs($data);
-            
+
+            $map_cal = $loss_factor * $price;
+            $map = round($map_cal/$loss_nat);
+
+            $inv_value = $map * $loss_factor;
+            $trans_value = $map * $loss_nat; 
+
+            $data = array(
+                'product_id' => $product,
+                'stock_moves_id' => $stock_move_id,
+                'supplier_id' => 0,
+                'trans_type' => 'Loss Gain',
+                'nat_qty' => $loss_nat, 
+                'f_qty' => $loss_factor,
+                'f_value' => 85,
+                'm_ton_qty' => $loss_mton,
+                'temp' => $this->input->post("temp"),
+                'density' => $this->input->post("density"),
+                'map' => $map,
+                'inv_value' => $inv_value,
+                'trans_value' => $trans_value
+            );
+
+            $log = $this->Purchases_model->saveLogs($data);
         }
 
         if ($this->form_validation->run() == true && $log) {
@@ -1320,7 +1347,11 @@ class Products extends MY_Controller
     function getPrice()
     {
         $id = $this->input->get('id');
+        $silo = $this->input->get('silo');
+        $this->load->model("Db_model");
+        $curr_stock = $this->Db_model->getCurrStock($silo, $id);
         $price = $this->products_model->price($id);
+        $price['stock'] = $curr_stock["qty"];
         echo json_encode($price);
     }
 

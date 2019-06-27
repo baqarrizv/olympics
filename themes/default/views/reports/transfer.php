@@ -1,26 +1,4 @@
-<script>
-    $(document).ready(function () {
-        function tax_type(x) {
-            return (x == 1) ? "<?=lang('percentage')?>" : "<?=lang('fixed')?>";
-        }
 
-        $('#CURData').dataTable({
-            "aaSorting": [[2, "asc"], [3, "asc"]],
-            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
-            "iDisplayLength": <?= $Settings->rows_per_page ?>,
-            'bProcessing': true, 'bServerSide': true,
-            'sAjaxSource': '<?= site_url('reports/getStockReport') ?>',
-            'fnServerData': function (sSource, aoData, fnCallback) {
-                aoData.push({
-                    "name": "<?= $this->security->get_csrf_token_name() ?>",
-                    "value": "<?= $this->security->get_csrf_hash() ?>"
-                });
-                $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
-            },
-            "aoColumns": [null, null, null, null, null, null]
-        });
-    });
-</script>
 <?= form_open('system_settings/warehouse_actions', 'id="action-form"') ?>
 <div class="box">
     <div class="box-header">
@@ -38,8 +16,6 @@
                         <li><a href="#" id="pdf" data-action="export_pdf"><i
                                     class="fa fa-file-pdf-o"></i> <?= lang('export_to_pdf') ?></a></li>
                         <li class="divider"></li>
-                        <li><a href="#" id="delete" data-action="delete"><i
-                                    class="fa fa-trash-o"></i> <?= lang('delete_warehouses') ?></a></li>
 
                     </ul>
                 </li>
@@ -63,13 +39,29 @@
                             <th><?php echo $this->lang->line("Temp"); ?></th>
                             <th><?php echo $this->lang->line("Density"); ?></th>
                             <th><?php echo $this->lang->line("85F"); ?></th>
+                            <th><?php echo $this->lang->line("M.Tonn"); ?></th>
+                            <th><?php echo $this->lang->line("Qty In"); ?></th>
+                            <th><?php echo $this->lang->line("Qty Out"); ?></th>
                            
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td colspan="9" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
-                        </tr>
+                            <?php
+                            foreach ($transfers as $transfer) {
+                            ?>
+                            <tr>
+                                <td><?= $transfer->description ?></td>
+                                <td><?= $transfer->units ?></td>
+                                <td><?= $transfer->location_name ?></td>
+                                <td><?= $transfer->nat_qty ?></td>
+                                <td><?= $transfer->temp ?></td>
+                                <td><?= $transfer->density ?></td>
+                                <td><?= $transfer->f_qty ?></td>
+                                <td><?= $transfer->m_ton_qty ?></td>
+                                <td><?= $transfer->qty < 0 ? '' : $transfer->qty; ?></td>
+                                <td><?= $transfer->qty < 0 ? $transfer->qty : '' ?></td>
+                            </tr>
+                            <?php } ?>
 
                         </tbody>
                     </table>
@@ -88,6 +80,8 @@
 <?= form_close() ?>
 <script language="javascript">
     $(document).ready(function () {
+
+        $('#CURData').DataTable();
 
         $('#delete').click(function (e) {
             e.preventDefault();
