@@ -158,18 +158,18 @@
                         <tr class="active">
                             <th><?php echo $i; ?></th>
                             <th><?php echo $t->description; ?></th>
-                            <th><?php echo $t->tran_date; ?></th>
-                            <th><?php echo $t->reference; ?></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th><?php echo $t->date; ?></th>
+                            <th><?php echo $t->transfer_no; ?></th>
+                            <th><?php echo $t->name; ?></th>
+                            <th><?php echo $t->from_warehouse_name; ?></th>
+                            <th><?php echo $t->name; ?></th>
+                            <th><?php echo $t->to_warehouse_name; ?></th>
+                            <th><?php echo $t->quantity; ?></th>
+                            <th>0</th>
+                            <th>0</th>
+                            <th><?php echo $t->quantity; ?></th>
+                            <th>0</th>
+                            <th>0</th>
                             <th style="width:100px; text-align: center;"><?= lang("actions"); ?></th>
                         </tr>
                         <?php

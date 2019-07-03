@@ -83,7 +83,8 @@
                            <td><?= $p->description ?></td>
                            <td><?= $p->units ?></td>
                            <td><?= $p->total ?></td>
-                           <td><?= $p->booked?></td>
+                            <td><?= $p->variant == null ? '0' :  $p->variant->booked ?></td>
+                           <!-- <td><?= $p->booked?></td> -->
                            <td>
                             <a href="<?php echo site_url('Products/view_details'); ?>/<?=$p->stock_id?>" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> <?= lang('View Details') ?></a>
                            </td>

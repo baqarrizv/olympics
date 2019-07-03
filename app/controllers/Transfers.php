@@ -40,12 +40,6 @@ class Transfers extends MY_Controller
         $this->load->model('Products_model', 'products_model');
         $this->data['transfer'] =$this->products_model->getTransferData();
 
-
-         // $query = $this->db->( "SELECT * from sma_fin_stock_moves");
-        
-         // print('<pre>');
-         // print_r($this->data['transfer']);
-
         $meta = array('page_title' => lang('transfers'), 'bc' => $bc);
         $this->page_construct('transfers/index', $meta, $this->data);
     }
@@ -62,6 +56,8 @@ class Transfers extends MY_Controller
     //     $meta = array('page_title' => lang('transfers'), 'bc' => $bc);
     //     $this->page_construct('transfers/index', $meta, $this->data);
     // }
+
+    // End Faizan's Work
 
     function getTransfers()
     {

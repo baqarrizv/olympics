@@ -18,7 +18,7 @@
                     <th><?= lang("Product Title"); ?></th>
                     <th><?= lang("UoM"); ?></th>
                     <th><?= lang("Available Qty"); ?></th>
-                    <th><?= lang("Booked Qty"); ?></th>
+                    <!-- <th><?= lang("Booked Qty"); ?></th> -->
                     <th><?= lang("Location"); ?></th>
                     <th><?= lang("Warehouse"); ?></th>
                     <th><?= lang("Tank"); ?></th>
@@ -35,7 +35,7 @@
                    <td><?= $p->description ?></td>
                    <td><?= $p->units ?></td>
                    <td><?= $p->qty ?></td>
-                   <td>0</td>
+                   <!-- <td>0</td> -->
                    <td><?= $p->city_name ?></td>
                    <td><?= $p->warehouse ?></td>
                    <td><?= $p->location_name ?></td>
@@ -46,11 +46,8 @@
                 ?>
 
                 </tbody>
-
             </table>
-
-        </div>
-          
+          </div>
         </div>
         <div class="modal-footer">
         </div>

@@ -25,9 +25,28 @@ class Products_model extends CI_Model
     public function getProducts()
     {
 
-        $query = "SELECT sma_fin_stock_master.stock_id, sma_fin_stock_master.description, sma_fin_stock_master.units, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total ,FORMAT(SUM(sma_fin_sales_order_details.quantity - sma_fin_sales_order_details.qty_sent),2) as booked FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id LEFT JOIN sma_fin_sales_order_details ON sma_fin_sales_order_details.stk_code = sma_fin_stock_master.stock_id  GROUP BY sma_fin_stock_master.stock_id";
-        
-        // SELECT stk_code, sum(quantity-qty_sent) FROM `sma_fin_sales_order_details` group by stk_code
+
+        $this->db->select('sma_fin_stock_master.stock_id, sma_fin_stock_master.description, sma_fin_stock_master.units, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total')
+                 ->from('sma_fin_stock_master ')
+                 ->join('sma_fin_stock_moves','sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id')
+                 ->group_by('sma_fin_stock_master.stock_id');
+                 // ->where('departmental_req_product.departmental_req_id',$id);
+        $q = $this->db->get();
+        foreach (($q->result()) as $row)
+        {
+            $v = $this->db->query("SELECT stk_code,FORMAT(SUM(sma_fin_sales_order_details.quantity - sma_fin_sales_order_details.qty_sent),2) as booked FROM `sma_fin_sales_order_details` WHERE `stk_code` = '".$row->stock_id."' GROUP BY sma_fin_sales_order_details.stk_code");
+            if ($v->num_rows() > 0) {
+                foreach (($v->result()) as $vrow) {
+                    $row->variant = $vrow;
+                }
+            }else{
+                $row->variant = null;
+            }
+            
+            $data[] = $row;
+        }
+        return $data;
+
 
         $q = $this->db->query($query);
 
@@ -39,16 +58,11 @@ class Products_model extends CI_Model
         }
         return FALSE;
     }
-
-
-
 
     public function getTransferData()
     {
 
-        $query = "SELECT sma_fin_stock_moves.* ,sma_fin_stock_master.stock_id,sma_fin_stock_master.description from sma_fin_stock_moves left join sma_fin_stock_master on sma_fin_stock_master.stock_id = sma_fin_stock_moves.stock_id where sma_fin_stock_moves.type = '16' order by sma_fin_stock_moves.trans_id desc";
-        
-        // SELECT stk_code, sum(quantity-qty_sent) FROM `sma_fin_sales_order_details` group by stk_code
+    $query = "SELECT sma_transfers.*,sma_fin_stock_master.*, abc.warehouse_id,abcware.name from sma_transfers LEFT Join sma_fin_stock_master on sma_fin_stock_master.stock_id = sma_transfers.product_id left join sma_fin_locations abc on abc.loc_code collate utf8_general_ci = sma_transfers.from_warehouse_id collate utf8_general_ci left JOIN sma_warehouses abcware on abcware.id = abc.warehouse_id";
 
         $q = $this->db->query($query);
 
@@ -56,12 +70,45 @@ class Products_model extends CI_Model
             foreach (($q->result()) as $row) {
                 $data[] = $row;
             }
+            // print_r('<pre>');
+            // print_r($data);
+            // die();
             return $data;
         }
         return FALSE;
+
+    
+
+// $this->db->select("stock.stock_id, stock.description, stock.units, loc.location_name, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as qty, sma_fin_stock_moves.tran_date, sma_fin_stock_moves.reference, wh.name as warehouse, ct.city_name")
+            // ->join('sma_fin_locations loc', 'loc.loc_code= sma_fin_stock_moves.loc_code', 'left')
+            // ->join('sma_warehouses wh', 'wh.id=loc.warehouse_id', 'left')
+            // ->join('sma_city ct', 'ct.id=wh.city_id', 'left')
+            // ->join('sma_fin_stock_master stock', 'stock.stock_id=sma_fin_stock_moves.stock_id', 'left')
+            // ->group_by('sma_fin_stock_moves.stock_id, , sma_fin_stock_moves.loc_code');
+
+
+// SELECT sma_transfers.from_warehouse_id,ab.warehouse_id as from_W,sma_transfers.to_warehouse_id,abc.warehouse_id as to_W FROM `sma_transfers` LEFT JOIN sma_fin_locations ab on ab.loc_code collate utf8_general_ci = sma_transfers.from_warehouse_id collate utf8_general_ci LEFT JOIN sma_fin_locations abc on abc.loc_code collate utf8_general_ci = sma_transfers.from_warehouse_id collate utf8_general_ci
+
+        // $query = "SELECT move.*, item.description, item.mb_flag, item.units, stock.location_name, log.* FROM sma_fin_stock_moves move RIGHT JOIN sma_fin_locations stock ON stock.loc_code=move.loc_code RIGHT JOIN sma_fin_stock_master item ON move.stock_id = item.stock_id LEFT JOIN sma_transaction_logs log ON log.stock_moves_id = move.trans_id WHERE move.type = 16 ORDER BY trans_id";
+
+
+        // $query = "SELECT sma_transfers.*,sma_fin_stock_master.*,sma_fin_stock_master.* from sma_transfers LEFT Join sma_fin_stock_master on sma_fin_stock_master.stock_id = sma_transfers.product_id";
+
+
+        // $query = "SELECT sma_fin_stock_moves.* ,sma_fin_stock_master.stock_id,sma_fin_stock_master.description from sma_fin_stock_moves left join sma_fin_stock_master on sma_fin_stock_master.stock_id = sma_fin_stock_moves.stock_id where sma_fin_stock_moves.type = '16' order by sma_fin_stock_moves.trans_id desc";
+            
+        // SELECT stk_code, sum(quantity-qty_sent) FROM `sma_fin_sales_order_details` group by stk_code
+
+        // $q = $this->db->query($query);
+
+        // if ($q->num_rows() > 0) {
+        //     foreach (($q->result()) as $row) {
+        //         $data[] = $row;
+        //     }
+        //     return $data;
+        // }
+        // return FALSE;
     }
-
-
 
     //  public function getProducts()
     // {
@@ -79,9 +126,8 @@ class Products_model extends CI_Model
     //     return FALSE;
     // }
 
+// Faizan's Work End
 
-
-    // end
 
     public function getSpecificByLoc($id, $loc)
     {
