@@ -8,6 +8,39 @@ class Transfers_model extends CI_Model
         parent::__construct();
     }
 
+
+    public function list_transfer()
+    {
+
+        $query = "SELECT sma_transfers.*, sma_transaction_logs.nat_qty, sma_transaction_logs.f_qty, sma_transaction_logs.m_ton_qty, sma_transaction_logs.temp, sma_fin_stock_master.description FROM sma_transfers LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.reference = sma_transfers.transfer_no LEFT JOIN sma_transaction_logs ON sma_transaction_logs.stock_moves_id = sma_fin_stock_moves.trans_id LEFT JOIN sma_fin_stock_master ON sma_fin_stock_master.stock_id = sma_fin_stock_moves.stock_id WHERE sma_transfers.status = 'pending'";
+        $q = $this->db->query($query);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+
+        return FALSE;
+    }
+
+    public function show_transfer($id)
+    {
+        $query = "SELECT sma_transfers.*, sma_transaction_logs.nat_qty, sma_transaction_logs.f_qty, sma_transaction_logs.m_ton_qty, sma_transaction_logs.temp, sma_transaction_logs.density, sma_fin_stock_master.description FROM sma_transfers LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.reference = sma_transfers.transfer_no LEFT JOIN sma_transaction_logs ON sma_transaction_logs.stock_moves_id = sma_fin_stock_moves.trans_id LEFT JOIN sma_fin_stock_master ON sma_fin_stock_master.stock_id = sma_fin_stock_moves.stock_id WHERE sma_transfers.status = 'pending' AND sma_transfers.id=".$id;
+        
+        $q = $this->db->query($query);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+
+        return FALSE;
+    }
+
     public function getProductNames($warehouse_id, $limit = 5)
     {
         $query = "SELECT DISTINCT(sma_fin_stock_master.stock_id), sma_fin_stock_master.description FROM `sma_fin_stock_master` left join sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id where sma_fin_stock_moves.loc_code = '".$warehouse_id."'";

@@ -178,7 +178,7 @@ class Sales extends MY_Controller
     }
 
     public function modal_view($id = null)
-    {
+    { 
         $this->sma->checkPermissions('index', true);
 
         
@@ -202,7 +202,7 @@ class Sales extends MY_Controller
         $this->data['order'] = $this->db_model->getLatestSales($id);
         $this->data['details'] = $this->sales_model->getAllInvoiceItems($id);
         $this->data['warehouses'] = $this->site->getAllWarehouses();
-
+        $this->data['density_chart'] = $this->site->getDensityChart();
         
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('sales')));
         $meta = array('page_title' => lang('Sale Order Delivery'), 'bc' => $bc);
@@ -211,38 +211,50 @@ class Sales extends MY_Controller
 
     public function deliver_sale_order()
     {
-        
-        $this_delivery = $this->input->post('this_delivery');
-
-        $date = date('Y-m-d');
-        $warehouse_id = $this->input->post('warehouse');
-        $order_no = $this->input->post('order_no');
-        $stock_id = $this->input->post('stock_id');
-        $customer_id = $this->input->post('deb_no');
 
         $this->load->model('Db_model', 'db_model');
+        $get_trans_no = $this->db_model->get_trans_no();
 
+        $post = $_POST['data'][0];
+
+        $customer_id = $post['debtor_no'];
         $customer = $this->db_model->get_customer($customer_id);
-        
-        $delivery_items_total = count($stock_id);
-        $tax_total = 0;
-        $freight_tax = $delivery->get_shipping_tax();
-
-        for ($i = 0; $i < count($stock_id); $i++) 
-        {
-
-            //$d = $this->db_model->deliver_sale($this_delivery[$i], $order_no, $stock_id[$i]);
-            $delivery_no = $this->db_model->write_customer_trans(ST_CUSTDELIVERY, $trans_no, $delivery->customer_id,
-            $delivery->Branch, $delivery->document_date, $delivery->reference,
-            $delivery_items_total, 0,
-            $delivery->tax_included ? 0 : $tax_total-$freight_tax,
-            $delivery->freight_cost,
-            $delivery->tax_included ? 0 : $freight_tax,
-            $delivery->sales_type, $delivery->order_no,
-            $delivery->ship_via, $delivery->due_date, 0, 0, $delivery->dimension_id, 
-            $delivery->dimension2_id, $delivery->payment, $delivery->tax_included, $delivery->prep_amount);
-            
+        $delivery_items_total = count($_POST['data']);
+        $freight_tax = $post['freight_cost'];
+        $trans_no = $get_trans_no == null ? 1 : $get_trans_no->trans_no+1;
+        $date = date('Y-m-d');
+        $branch_code = $post['branch_code'];
+        $reference = $post['reference'];
+        $order_no = $post['order_no'];
+        $tax_group_id = $post['tax_group_id'];
+        $total = 0;
+        $tax_item_id = array();
+        foreach ($post as $item) {
+            $total += $item['this_delivery'] * $item['price'];
+            $tax_item_id[] = $item['tax_type_id'];  
         }
+        echo json_encode($tax_item_id);
+        exit();
+        
+        $tax_group_details = array();
+
+        $q = $this->db->get_where('sma_fin_tax_group_items', array('tax_group_id' => $tax_group_id));
+        if ($q->num_rows() > 0) {
+            foreach(($q->result()) as $row)
+            {
+                $tax_group_details[] = $row;
+            }
+
+        }
+
+        $this->load->model("Sales_model", "sale");
+        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer, $branch_code, $tax_group_id);
+    
+        // $d = $this->db_model->deliver_sale($this_delivery[$i], $order_no, $stock_id[$i]);
+        // $delivery_no = $this->db_model->write_customer_trans(13, $trans_no, $customer_id,
+        // $branch, $date, $reference, $total, 0, 0, $freight_tax, 
+        // $freight_tax, 1, $order_no, 1, $date, 0, 0, 0, 0, 4, 1, 0);
+
         
 
     }

@@ -30,6 +30,35 @@ class Sales_model extends CI_Model
         }
     }
 
+    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer)
+    {
+        foreach ($post as $item) {
+            $total += $item['this_delivery'] * $item['price'];  
+        }
+        
+        return $order_no;
+
+    }
+
+    function get_shipping_tax()
+    {
+
+        $tax_items = get_shipping_tax_as_array($this->tax_group_id);
+        $tax_rate = 0;
+        if ($tax_items != null) {
+            foreach ($tax_items as $item_tax) {
+                $index = $item_tax['tax_type_id'];
+                if (isset($this->tax_group_array[$index]['rate'])) {
+                    $tax_rate += $item_tax['rate'];
+                }
+            }
+        }
+        if($this->tax_included)
+            return round($this->freight_cost*$tax_rate/($tax_rate+100),  user_price_dec());
+        else
+            return round($this->freight_cost*$tax_rate/100,  user_price_dec());
+    }
+
     public function getProductComboItems($pid, $warehouse_id = NULL)
     {
         $this->db->select('products.id as id, combo_items.item_code as code, combo_items.quantity as qty, products.name as name,products.type as type, warehouses_products.quantity as quantity')
@@ -134,7 +163,7 @@ class Sales_model extends CI_Model
 
     public function getAllInvoiceItems($sale_id)
     {   
-        $this->db->select('fin_sales_order_details.*, fin_stock_master.units');
+        $this->db->select('fin_sales_order_details.*, fin_stock_master.units, fin_stock_master.tax_type_id');
         $this->db->join('fin_stock_master', 'fin_stock_master.stock_id = fin_sales_order_details.stk_code', 'left');
         $q = $this->db->get_where('fin_sales_order_details', array('fin_sales_order_details.order_no' => $sale_id));
         if ($q->num_rows() > 0) {

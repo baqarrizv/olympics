@@ -15,6 +15,8 @@ class Reports extends MY_Controller
         $this->lang->load('reports', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->model('reports_model');
+        $this->load->model('Db_model', 'db_model');
+        $this->load->model('Products_model', 'product_model');
         $this->data['pb'] = array(
             'cash' => lang('cash'),
             'CC' => lang('CC'),
@@ -37,6 +39,33 @@ class Reports extends MY_Controller
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('reports')));
         $meta = array('page_title' => lang('reports'), 'bc' => $bc);
         $this->page_construct('reports/index', $meta, $this->data);
+
+    }
+
+    public function plant_report()
+    {
+
+        $this->sma->checkPermissions();
+        $data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('reports')));
+        if ($_POST)
+        {
+
+            $this->data['movement'] = $this->reports_model->getPlantMovements($_POST['warehouse'], 
+                $_POST['product']);
+
+        }else{
+        
+            $this->data['movement'] = $this->reports_model->getMovements();
+
+        }
+        $this->data['warehouses'] = $this->site->getAllWarehouses();
+        $this->data['citites'] = $this->db_model->getAllCities();
+        $this->data['products'] = $this->product_model->getAllProducts();
+
+        $meta = array('page_title' => lang('Plant Report'), 'bc' => $bc);
+        $this->page_construct('reports/plant_report', $meta, $this->data);
 
     }
 

@@ -175,14 +175,10 @@ class Transfers extends MY_Controller
 
 
             $l = $this->transfers_model->addTransfer($data);
-            
-            
+           
             $moveId = $this->transfers_model->add_stock_move(16, $item_code, $transfer_id, $from_warehouse_code, $date, $transfer_no, -$item_quantity, 0);
 
-            
-
             $rate = $this->Db_model->get_exchange_rate('PKR');
-
             $homeCurr = 1/$rate['rate_sell'];
             $map = round($material_cost * $homeCurr);
             $inv_value = $map * $item_quantity;
@@ -193,36 +189,7 @@ class Transfers extends MY_Controller
                 'product_id' => $item_code,
                 'stock_moves_id' => $moveId,
                 'supplier_id' => 0,
-                'trans_type' => 'Transfer',
-                'nat_qty' => $natural_volume,
-                'f_qty' => -$item_quantity,
-                'f_value' => 85,
-                'm_ton_qty' => $mton_quantity,
-                'temp' => $temperature,
-                'density' => $density,
-                'map' => $map,
-                'inv_value' => $inv_value,
-                'trans_value' => $trans_value,
-                'is_archive' => 0,
-                
-            );
-
-           
-
-
-            $log = $this->Purchases_model->saveLogs($move);
-
-            
-
-            $moveId = $this->transfers_model->add_stock_move(16, $item_code, $transfer_id, $to_warehouse_code,
-                $date, $transfer_no, $item_quantity, 0);
-
-            $move = array(
-
-                'product_id' => $item_code,
-                'stock_moves_id' => $moveId,
-                'supplier_id' => 0,
-                'trans_type' => 'Transfer-In',
+                'trans_type' => 'Transfer-Out',
                 'nat_qty' => $natural_volume,
                 'f_qty' => $item_quantity,
                 'f_value' => 85,
@@ -270,8 +237,7 @@ class Transfers extends MY_Controller
             redirect("transfers");
         } 
         else {
-
-
+            
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
 
             $this->data['name'] = array('name' => 'name',
@@ -294,6 +260,134 @@ class Transfers extends MY_Controller
             $meta = array('page_title' => lang('transfer_quantity'), 'bc' => $bc);
             $this->page_construct('transfers/add', $meta, $this->data);
         }
+    }
+
+    public function receive_transfer($id)
+    {
+        $this->load->helper('security');
+        $this->load->model('site');
+
+        $this->form_validation->set_message('is_natural_no_zero', lang("no_zero_required"));
+        //$this->form_validation->set_rules('reference_no', lang("reference_no"), 'required');
+        $this->form_validation->set_rules('to_warehouse', lang("warehouse") . ' (' . lang("to") . ')', 'required');
+        $this->form_validation->set_rules('from_warehouse', lang("warehouse") . ' (' . lang("from") . ')', 'required');
+        
+
+        if ($this->form_validation->run() == true) {
+
+
+            $transfer_no = $this->input->post('reference_no') ? $this->input->post('reference_no') : $this->site->getReference('to');
+            
+            
+            $note = $this->sma->clear_tags($this->input->post('note'));
+            $status = $this->input->post('status');
+
+            $from_warehouse_code = $this->input->post('from_warehouse');
+            $from_warehouse_name = $this->input->post('from_warehouse_name');
+
+            $to_warehouse_code = $this->input->post('to_warehouse');
+            $to_warehouse_name = $this->input->post('to_warehouse_name');
+
+            $total = 0;
+            $product_tax = 0;
+
+            $item_code = $_POST['product_id'];
+            $item_quantity = $_POST['factor'];
+            $natural_volume = $_POST['qty'];
+
+            $mton_quantity = $_POST['mton'];
+            $date = date('Y-m-d');
+            $temperature = $_POST['temp'];
+            $density = $_POST['density'];
+            $material_cost = $_POST['material_cost'];
+
+            $this->load->model('Purchases_model');
+            $this->load->model('Db_model');
+
+            $transfer_id = $this->transfers_model->get_next_trans_no(16);
+        
+            $this->db->where('id', $id)->update('transfers', array('status' => $status));
+
+
+            $moveId = $this->transfers_model->add_stock_move(16, $item_code, $transfer_id, $to_warehouse_code, $date, $transfer_no, $item_quantity, 0);
+
+            
+
+            $rate = $this->Db_model->get_exchange_rate('PKR');
+
+            $homeCurr = 1/$rate['rate_sell'];
+            $map = round($material_cost * $homeCurr);
+            $inv_value = $map * $item_quantity;
+            $trans_value = $map * $natural_volume;
+
+            $move = array(
+
+                'product_id' => $item_code,
+                'stock_moves_id' => $moveId,
+                'supplier_id' => 0,
+                'trans_type' => 'Transfer-In',
+                'nat_qty' => $natural_volume,
+                'f_qty' => -$item_quantity,
+                'f_value' => 85,
+                'm_ton_qty' => $mton_quantity,
+                'temp' => $temperature,
+                'density' => $density,
+                'map' => $map,
+                'inv_value' => $inv_value,
+                'trans_value' => $trans_value,
+                'is_archive' => 0,
+                
+            );
+
+            $log = $this->Purchases_model->saveLogs($move);
+            $this->transfers_model->add_comments(16, $transfer_id, $date, $note);
+            $trail = $this->Purchases_model->add_audit_trail(16, $transfer_id, $date);
+            
+        }
+
+        if ($this->form_validation->run() == true && $trail) {
+            $this->session->set_userdata('remove_tols', 1);
+            $this->session->set_flashdata('message', lang("transfer_added"));
+            redirect("transfers");
+        } 
+        else {
+
+            $this->data['transfer'] =$this->transfers_model->show_transfer($id);
+           $this->data['density_chart'] = $this->site->getDensityChart();
+            $this->data['modal_js'] = $this->site->modal_js();
+            
+            $this->load->view($this->theme . 'transfers/add_receive', $this->data);
+            
+        }
+    }
+
+    public function receive()
+    {
+        $this->sma->checkPermissions();
+
+        $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+
+            $this->data['name'] = array('name' => 'name',
+                'id' => 'name',
+                'type' => 'text',
+                'value' => $this->form_validation->set_value('name'),
+            );
+            $this->data['quantity'] = array('name' => 'quantity',
+                'id' => 'quantity',
+                'type' => 'text',
+                'value' => $this->form_validation->set_value('quantity'),
+            );
+
+            $this->data['warehouses'] = $this->site->getAllWarehouses();
+            $this->data['density_chart'] = $this->site->getDensityChart();
+            $this->data['tax_rates'] = $this->site->getAllTaxRates();
+            $this->data['rnumber'] = ''; //$this->site->getReference('to');
+            $this->data['transfer'] =$this->transfers_model->list_transfer();
+           
+
+            $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('transfers'), 'page' => lang('transfers')), array('link' => '#', 'page' => lang('Receive Transfer')));
+            $meta = array('page_title' => lang('transfer_quantity'), 'bc' => $bc);
+            $this->page_construct('transfers/receive', $meta, $this->data);
     }
 
     function edit($id = NULL)

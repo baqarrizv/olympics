@@ -62,7 +62,7 @@
                             <th><?= lang("Density"); ?></th>
                             <th><?= lang("M.Ton"); ?></th>
                             <th><?= lang("Volume at 85F"); ?></th>
-                            <th><?= lang("Warehouse"); ?></th>
+                            <th><?= lang("MAP"); ?></th>
 
 
                             <!-- <th><?= lang("Supplier Name"); ?></th>
@@ -108,7 +108,7 @@
                     row += "<td>"+ val.density +"</td>";
                     row += "<td>"+ val.m_ton_qty +"</td>";
                     row += "<td>"+ val.f_qty +"</td>";
-                    row += "<td> Warehouse </td>";
+                    row += "<td> "+ val.map +" </td>";
 
 
                     // row += "<td>"+ i +"</td>"; 

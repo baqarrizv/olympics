@@ -201,8 +201,8 @@
                             <div class="form-group">
                                 <?= lang("status", "tostatus"); ?>
                                 <?php
-                                $post = array('completed' => lang('completed'), 'pending' => lang('pending'), 'sent' => lang('sent'));
-                                echo form_dropdown('status', $post, (isset($_POST['status']) ? $_POST['status'] : ''), 'id="tostatus" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("status") . '" required="required" style="width:100%;" ');
+                                $post = array('pending' => lang('pending'));
+                                echo form_dropdown('status', $post, (isset($_POST['status']) ? $_POST['status'] : ''), 'id="tostatus" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("status") . '" required="required" style="width:100%;"');
                                 ?>
                             </div>
                         </div>

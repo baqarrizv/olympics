@@ -104,3 +104,9 @@
 [20-Jun-2019 13:44:47 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
 [20-Jun-2019 13:44:47 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
 [20-Jun-2019 13:46:11 Europe/Berlin] Rounding error 0.01 encountered for trans_type:10,trans_no:1
+[04-Jul-2019 10:29:35 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[04-Jul-2019 10:29:35 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[04-Jul-2019 10:29:35 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[18-Jul-2019 07:49:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[18-Jul-2019 07:49:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[18-Jul-2019 07:49:58 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed

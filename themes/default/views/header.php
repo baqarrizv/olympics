@@ -353,9 +353,15 @@
                                             <i class="fa fa-star-o"></i><span class="text"> <?= lang('list_transfers'); ?></span>
                                         </a>
                                     </li>
+
                                     <li id="transfers_add">
                                         <a class="submenu" href="<?= site_url('transfers/add'); ?>">
                                             <i class="fa fa-plus-circle"></i><span class="text"> <?= lang('add_transfer'); ?></span>
+                                        </a>
+                                    </li>
+                                    <li id="transfers_receive">
+                                        <a class="submenu" href="<?= site_url('transfers/receive'); ?>">
+                                            <i class="fa fa-star-o"></i><span class="text"> <?= lang('Receive Transfer'); ?></span>
                                         </a>
                                     </li>
                                     <li id="transfers_purchase_by_csv">
@@ -512,6 +518,11 @@
                                     <span class="chevron closed"></span>
                                 </a>
                                 <ul>
+                                    <li id="plant_report">
+                                        <a href="<?= site_url('reports/plant_report') ?>">
+                                            <i class="fa fa-bars"></i><span class="text"> <?= lang('Plant Report'); ?></span>
+                                        </a>
+                                    </li>
                                     <li id="reports_index">
                                         <a href="<?= site_url('reports/product_ledger') ?>">
                                             <i class="fa fa-bars"></i><span class="text"> <?= lang('Product Ledger'); ?></span>

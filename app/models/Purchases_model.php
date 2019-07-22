@@ -22,6 +22,162 @@ class Purchases_model extends CI_Model
         return FALSE;
     }
 
+    public function grn($data, $line_items, $delivery, $amount, $supplier_id, $after_waste, $mton, $temp, $density, $warehouse, $date, $location)
+    {
+        //return $date;
+        
+        $this->db->trans_begin();
+        try {
+
+            // $this->db->trans_start();
+        // $this->db->trans_strict(FALSE);
+        $total = 0;
+        $grn = $this->db->insert('sma_fin_grn_batch', $data);
+        $grn_id = $this->db->insert_id();
+        for ($i = 0; $i < count($line_items); $i++) {
+            
+            $this->db->select("mb_flag, inventory_account, cogs_account, adjustment_account, sales_account, wip_account, dimension_id, dimension2_id, material_cost");
+            
+            $stock_gl_code = $this->db->get_where('fin_stock_master', array('stock_id' => $line_items[$i]['item_code']))->row_array();
+
+            $dlvry = str_replace(",", "", $delivery[$i]);
+            $amnt = str_replace(",", "", $amount[$i]);
+            
+            $d = array(
+                    'type' => 25,
+                    'type_no' => $grn_id,
+                    'tran_date' => date('Y-m-d'),
+                    'account' => $stock_gl_code["inventory_account"],
+                    'dimension_id' => $stock_gl_code['dimension_id'],
+                    'dimension2_id' => $stock_gl_code['dimension2_id'],
+                    'memo_' => $line_items[$i]['item_code'],
+                    'amount' => number_format($dlvry * $amnt, 2)
+
+            );
+
+            $this->db->insert('sma_fin_gl_trans', $data);
+            $total += $d['amount'];
+            
+           
+            $up = array(
+                    'supplier_id' => $supplier_id,
+                    'stock_id' => $line_items[$i]['item_code'],
+                    'price' => $line_items[$i]['unit_price'],
+                    'conversion_factor' => 1,
+                    'supplier_description' => $line_items[$i]['description']
+            );
+
+            $purchase_data = $this->get_purchase_data($up['supplier_id'], $up['stock_id']);
+            if ($purchase_data === false)
+            {
+                $sql_purchase = $this->db->insert('sma_fin_purch_data', $up);
+               
+            }
+
+            $sql_purchase = "UPDATE sma_fin_purch_data SET price= ".$up['price'].", supplier_description= '".$up['supplier_description']."' WHERE stock_id=".$up['stock_id']." AND supplier_id= ".$up['supplier_id'];
+            
+            $purchase = $this->db->query($sql_purchase);
+           
+
+            $sql = "UPDATE sma_fin_purch_order_details
+            SET quantity_received = quantity_received + ".$delivery[$i].",
+            std_cost_unit=".$line_items[$i]['std_cost_unit'].",
+            quantity_ordered=".$line_items[$i]['quantity_ordered'].",
+            act_price=".$line_items[$i]['act_price']."
+            WHERE po_detail_item = ".$line_items[$i]['po_detail_item'];
+
+            $test = $this->db->query($sql);
+
+            $grn_item = $this->add_grn_detail_item($grn_id, $line_items[$i]['po_detail_item'],
+                $line_items[$i]['item_code'], $line_items[$i]['description'], $delivery[$i], $line_items[$i]['act_price'], 
+                $line_items[$i]['quantity_ordered']);
+
+            $sql = "INSERT INTO sma_fin_stock_moves (stock_id, trans_no, type, loc_code,
+            tran_date, qty, standard_cost, price) VALUES ("
+            .$line_items[$i]['item_code'].", ".$grn_id.", 25, '".$location."', ".$date.", "
+            .$after_waste[$i].", ".$line_items[$i]['std_cost_unit']."," .$line_items[$i]['act_price'].")";
+
+            $this->db->query($sql);
+            $stock_move_id = $this->db->insert_id();
+
+            $log = array(
+                    'product_id' => $line_items[$i]['item_code'],
+                    'supplier_id' => $supplier_id,
+                    'stock_moves_id' => $stock_move_id,
+                    'trans_type' => 'Purchase',
+                    'nat_qty' => $dlvry,
+                    'f_qty' => $after_waste[$i],
+                    'f_value' => 85,
+                    'm_ton_qty' => $mton[$i],
+                    'temp' => $temp[$i],
+                    'density' => $density[$i],
+                    'map' => $line_items[$i]['unit_price'],
+                    'inv_value' =>  $after_waste[$i] * $line_items[$i]['unit_price'],
+                    'trans_value' => $dlvry * $line_items[$i]['unit_price'],
+
+             );
+
+           $l = $this->db->insert('transaction_logs', $log);
+
+           $st = $this->add_update_stock($line_items[$i]['item_code'], $warehouse, $after_waste[$i],  $after_waste[$i] * $line_items[$i]['unit_price']);
+
+
+           }
+
+           $dt = array(
+                    'type' => 25,
+                    'type_no' => $grn_id,
+                    'tran_date' => date('Y-m-d'),
+                    'account' => 1550,
+                    'dimension_id' => 0,
+                    'dimension2_id' => 0,
+                    'amount' => -$total,
+
+            );
+            
+            $this->db->insert('sma_fin_gl_trans', $dt);
+            $total += $dt['amount'];
+
+            //$i = $this->add_audit_trail(25, $grn_id, $date);
+            $trans_type = 25;
+
+            $sql = "INSERT INTO sma_fin_audit_trail(type, trans_no, user, gl_date, description)
+                VALUES(".$trans_type.", ".$grn_id.", 1,".$date.", '')";
+
+            $this->db->query($sql);
+            // all audit records beside just inserted one should have gl_seq set to NULL
+            // to avoid need for subqueries (not existing in MySQL 3) all over the code
+            $ins_id = $this->db->insert_id();
+
+            $sql = "UPDATE sma_fin_audit_trail audit LEFT JOIN sma_fin_fiscal_year year ON year.begin<= '".$date."' AND year.end>= '".$date."'
+                SET audit.gl_seq = IF(audit.id=".$ins_id.", 0, NULL),"
+                ."audit.fiscal_year=year.id, audit.gl_date = '".$date."'"
+                . " WHERE type=".$trans_type." AND trans_no="
+                . $grn_id;
+            
+            $this->db->query($sql);
+            
+            $this->db->trans_commit();
+            return TRUE;
+           
+            
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            return $e;
+            
+        }
+        
+
+
+            // $this->db->trans_complete();
+            // if ($this->db->trans_status() === TRUE)
+            // {
+            //     return TRUE;
+            // }
+            // return $this->db->error();
+
+    }
+
     public function getAllProducts()
     {
         $q = $this->db->get('products');

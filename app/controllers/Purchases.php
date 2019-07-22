@@ -70,7 +70,7 @@ class Purchases extends MY_Controller
 
     public function add_grn()
     {
-        
+        $this->load->helper('security');
         $this->sma->checkPermissions();
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
 
@@ -91,11 +91,9 @@ class Purchases extends MY_Controller
 
 
         $this->load->model('Db_model');
-        
-
         $rate = $this->Db_model->get_exchange_rate($curr_code);
-        
         $this->load->model('Purchases_model');
+
         $data['grn'] = array(
             'purch_order_no' => $order_no,
             'supplier_id' => $supplier_id,
@@ -105,90 +103,19 @@ class Purchases extends MY_Controller
             'rate' => $rate['rate_sell']
         );
 
-        
+
+
         $line_items = $this->Db_model->getPurchaseDetails($order_no);
+        
+        $grn_ = $this->Purchases_model->grn($data['grn'], $line_items, $delivery, $amount, $supplier_id, $after_waste, $mton, $temp, $density, $warehouse, $date_, $location);
+        
+        if ($grn_)
+        {
+            redirect($_SERVER['HTTP_REFERER']);
+        }
 
-        $grn = $this->Purchases_model->add_grn_batch($data['grn']);
+        echo "Erro in GRN!";
 
-
-        for ($i = 0; $i < count($line_items); $i++) {
-            
-
-            $stock_gl_code = $this->Purchases_model->get_stock_gl_code($line_items[$i]['item_code']);
-
-            $dlvry = str_replace(",", "", $delivery[$i]);
-            $amnt = str_replace(",", "", $amount[$i]);
-            
-            $d = array(
-                    'type' => 25,
-                    'type_no' => $grn,
-                    'tran_date' => date('Y-m-d'),
-                    'account' => $stock_gl_code["inventory_account"],
-                    'dimension_id' => $stock_gl_code['dimension_id'],
-                    'dimension2_id' => $stock_gl_code['dimension2_id'],
-                    'memo_' => $line_items[$i]['item_code'],
-                    'amount' => number_format($dlvry * $amnt, 2)
-
-            );
-
-            
-            $total += $this->Purchases_model->add_gl_trans_supplier($d);
-           
-            $up = array(
-                    'supplier_id' => $supplier_id,
-                    'stock_id' => $line_items[$i]['item_code'],
-                    'price' => $line_items[$i]['unit_price'],
-                    'conversion_factor' => 1,
-                    'supplier_description' => $line_items[$i]['description']
-            );
-           
-            $aupd = $this->Purchases_model->add_or_update_purchase_data($up);
-
-            $test = $this->Purchases_model->update_purchase_order_detail($delivery[$i], $line_items[$i]['std_cost_unit'], $line_items[$i]['quantity_ordered'], $line_items[$i]['act_price'], $line_items[$i]['po_detail_item']);
-
-            $grn_item = $this->Purchases_model->add_grn_detail_item($grn, $line_items[$i]['po_detail_item'],
-                $line_items[$i]['item_code'], $line_items[$i]['description'], $delivery[$i], $line_items[$i]['act_price'], 
-                $line_items[$i]['quantity_ordered']);
-
-            $log = array(
-                    'product_id' => $line_items[$i]['item_code'],
-                    'supplier_id' => $supplier_id,
-                    'trans_type' => 'Purchase',
-                    'nat_qty' => $dlvry,
-                    'f_qty' => $after_waste[$i],
-                    'f_value' => 85,
-                    'm_ton_qty' => $mton[$i],
-                    'temp' => $temp[$i],
-                    'density' => $density[$i],
-                    'map' => $line_items[$i]['unit_price'],
-                    'inv_value' =>  $after_waste[$i] * $line_items[$i]['unit_price'],
-                    'trans_value' => $dlvry * $line_items[$i]['unit_price'],
-
-             );
-           $l = $this->Purchases_model->saveLogs($log);
-
-           $st = $this->Purchases_model->add_update_stock($line_items[$i]['item_code'], $warehouse, $after_waste[$i],  $after_waste[$i] * $line_items[$i]['unit_price']);
-
-           
-            
-     }
-
-            $dt = array(
-                    'type' => 25,
-                    'type_no' => $grn,
-                    'tran_date' => date('Y-m-d'),
-                    'account' => 1550,
-                    'dimension_id' => 0,
-                    'dimension2_id' => 0,
-                    'amount' => -$total,
-
-            );
-            $total += $this->Purchases_model->add_gl_trans_supplier($dt);
-            $i = $this->Purchases_model->add_audit_trail(25, $grn, $date_);
-            
-            if ($i) {
-                redirect($_SERVER['HTTP_REFERER']);
-            }
         
     }
 

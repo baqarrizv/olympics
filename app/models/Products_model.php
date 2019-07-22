@@ -10,7 +10,7 @@ class Products_model extends CI_Model
 
     public function getAllProducts()
     {
-        $q = $this->db->get('products');
+        $q = $this->db->get('fin_stock_master');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
@@ -18,6 +18,24 @@ class Products_model extends CI_Model
             return $data;
         }
         return FALSE;
+    }
+
+    public function get_tank_qty($tank, $product)
+    {
+        $sql = "SELECT SUM(qty) as qty FROM sma_fin_stock_moves WHERE loc_code ='".$tank."' AND stock_id ='".$product."'";
+
+        //return $sql;
+
+        $q = $this->db->query($sql);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+
     }
 
 

@@ -403,7 +403,7 @@ function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $filter =
 function get_sql_for_sales_deliveries_view($from, $to, $customer_id, $stock_item, $location, $delivery, $outstanding=false)
 {
 	$sql = "SELECT trans.trans_no,
-			debtor.name,
+			debtor.name, 
 			branch.branch_code,
 			branch.br_name,
 			sorder.deliver_to,

@@ -10,7 +10,7 @@ class Db_model extends CI_Model
 
     public function getLatestSales($id = null)
     {
-        $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch");
+        $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch, sma_fin_cust_branch.tax_group_id");
         $this->db->join('fin_debtors_master', 'fin_debtors_master.debtor_no = fin_sales_orders.debtor_no', 'left');
         $this->db->join('sma_fin_cust_branch', 'sma_fin_cust_branch.debtor_no = fin_debtors_master.debtor_no', 'left');
         $this->db->order_by('fin_sales_orders.order_no', 'desc');
@@ -59,33 +59,23 @@ class Db_model extends CI_Model
         
 
     }
-
+    
     public function write_customer_trans($trans_type, $trans_no, $debtor_no, $BranchNo,
     $date_, $reference, $Total, $discount=0, $Tax=0, $Freight=0, $FreightTax=0,
     $sales_type=0, $order_no=0, $ship_via=0, $due_date="",
     $AllocAmt=0, $rate=0, $dimension_id=0, $dimension2_id=0, $payment_terms=null, $tax_included=0, $prep_amount=0)
     {
-        $new = $trans_no==0;
-        $curr = get_customer_currency($debtor_no);
-        if ($rate == 0)
-
-            $rate = get_exchange_rate_from_home_currency($curr, $date_);
-
-        $SQLDate = date2sql($date_);
-        if ($due_date == "")
-            $SQLDueDate = "0000-00-00";
-        else
-            $SQLDueDate = date2sql($due_date);
         
-        if ($trans_type == ST_BANKPAYMENT)
-            $Total = -$Total;
+        $rate = $this->get_exchange_rate('PKR');
 
-        if ($new || !exists_customer_trans($trans_type, $trans_no))
-        {
-            if ($new)
-            $trans_no = get_next_trans_no($trans_type);
+        $SQLDate = $date_;
+        
+        $CI =& get_instance();
+        //$CI->load->model('Transfers_model');
 
-        $sql = "INSERT INTO ".TB_PREF."debtor_trans (
+        //$trans_no = $CI->get_next_trans_no($trans_type);
+
+        $sql = "INSERT INTO sma_fin_debtor_trans (
             trans_no, type,
             debtor_no, branch_code,
             tran_date, due_date,
@@ -94,44 +84,34 @@ class Db_model extends CI_Model
             ov_gst, ov_freight, ov_freight_tax,
             rate, ship_via, alloc,
             dimension_id, dimension2_id, payment_terms, tax_included, prep_amount
-            ) VALUES (".db_escape($trans_no).", ".db_escape($trans_type).",
-            ".db_escape($debtor_no).", ".db_escape($BranchNo).",
-            '$SQLDate', '$SQLDueDate', ".db_escape($reference).",
-            ".db_escape($sales_type).", ".db_escape($order_no).", $Total, ".db_escape($discount).", $Tax,
-            ".db_escape($Freight).",
-            $FreightTax, $rate, ".db_escape($ship_via).", $AllocAmt,
-            ".db_escape($dimension_id).", ".db_escape($dimension2_id).", "
-            .db_escape($payment_terms, true).", "
-            .db_escape($tax_included).", ".db_escape($prep_amount).")";
-        } else {    // may be optional argument should stay unchanged ?
-        $sql = "UPDATE ".TB_PREF."debtor_trans SET
-            debtor_no=".db_escape($debtor_no)." , branch_code=".db_escape($BranchNo).",
-            tran_date='$SQLDate', due_date='$SQLDueDate',
-            reference=".db_escape($reference).", tpe=".db_escape($sales_type).", order_=".db_escape($order_no).",
-            ov_amount=$Total, ov_discount=".db_escape($discount).", ov_gst=$Tax,
-            ov_freight=".db_escape($Freight).", ov_freight_tax=$FreightTax, rate=$rate,
-            ship_via=".db_escape($ship_via).", alloc=$AllocAmt,
-            dimension_id=".db_escape($dimension_id).", dimension2_id=".db_escape($dimension2_id).",
-            payment_terms=".db_escape($payment_terms, true).",
-            tax_included=".db_escape($tax_included).",
-            prep_amount =".db_escape($prep_amount)."
-            WHERE trans_no=".db_escape($trans_no)." AND type=".db_escape($trans_type);
-        }
-        db_query($sql, "The debtor transaction record could not be inserted");
+            ) VALUES ('".$trans_no."', '".$trans_type."',
+            '".$debtor_no."', '".$BranchNo."',
+            '$SQLDate', '$SQLDate', '".$reference."', '".$sales_type."', 
+            '".$order_no."', '".$Total."', '".$discount."', $Tax,
+            ".$Freight.",
+            $FreightTax, $rate, ".$ship_via.", $AllocAmt,
+            ".$dimension_id.", ".$dimension2_id.", "
+            .$payment_terms.", "
+            .$tax_included.", ".$prep_amount.")";
 
-        if ($trans_type != ST_JOURNAL) // skip for journal entries
-            add_audit_trail($trans_type, $trans_no, $date_, $new ? '': _("Updated."));
+        $this->db->query($sql);
+        $deb_trans = $this->db->insert_id;
+        
+        $CI->load->model('Purchases_model');
+        $CI->add_audit_trail($trans_type, $trans_no, $date_);
 
         return $trans_no;
     }
 
     function get_customer($customer_id)
     {
-        $sql = "SELECT * FROM sma_fin_debtors_master WHERE debtor_no=".$customer_id;
-
-        $result = $this->db->query($sql);
-
-        return $result;
+        $q = $this->db->get_where("fin_debtors_master", array('debtor_no' => $customer_id));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
     }
 
     function getAllCities()
@@ -210,6 +190,19 @@ class Db_model extends CI_Model
 
     }
 
+    public function get_trans_no()
+    {
+        $this->db->select('MAX(trans_no) as trans_no');
+        
+        $q = $this->db->get_where('fin_debtor_trans', array('type' => 13));
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data = $row;
+            }
+            return $data;
+        }
+    }
+
     public function get_exchange_rate($code)
     {
         $this->db->select('rate_sell');
@@ -243,6 +236,7 @@ class Db_model extends CI_Model
             return $data;
         }
     }
+
 
 
 

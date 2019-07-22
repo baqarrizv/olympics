@@ -46,6 +46,13 @@ class Products extends MY_Controller
         $this->page_construct('products/list', $meta, $this->data);
     }
 
+    public function get_tank_qty($tank, $product)
+    {
+        $this->load->model("Products_model", "products");
+        $data = $this->products->get_tank_qty($tank, $product);
+        echo json_encode($data[0]);
+    }
+
     function getProducts($warehouse_id = NULL)
     {
         $this->sma->checkPermissions('index');
