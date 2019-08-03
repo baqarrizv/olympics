@@ -45,7 +45,8 @@ set_page_security( @$_SESSION['Items']->trans_type,
 			'NewDelivery' => 'SA_SALESDELIVERY',
 			'AddedDN' => 'SA_SALESDELIVERY', 
 			'NewInvoice' => 'SA_SALESINVOICE',
-			'AddedDI' => 'SA_SALESINVOICE'
+			'AddedDI' => 'SA_SALESINVOICE',
+			
 			)
 );
 

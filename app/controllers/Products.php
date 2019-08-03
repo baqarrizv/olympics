@@ -53,6 +53,89 @@ class Products extends MY_Controller
         echo json_encode($data[0]);
     }
 
+    public function third_party()
+    {
+        // $this->sma->checkPermissions();
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        
+        $this->load->model('Products_model', 'products_model');
+        $this->data['stock'] = $this->site->get_third_party();
+        // echo json_encode($this->data['stock']);
+        // exit();
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Third Party Stock')));
+        $meta = array('page_title' => lang('Third Party Stock'), 'bc' => $bc);
+        $this->page_construct('products/third_party', $meta, $this->data);
+    }
+
+    public function add_third_paty()
+    {
+        $this->load->helper('security');
+        $this->form_validation->set_rules('warehouse', lang("warehouse"), 'required');
+        $this->form_validation->set_rules('silo', lang("silo"), 'required');
+        $this->form_validation->set_rules('product', lang("product"), 'required');
+        $this->form_validation->set_rules('nat', lang("nat"), 'required');
+        $this->form_validation->set_rules('temp', lang("temp"), 'required');
+        $this->form_validation->set_rules('density', lang("density"), 'required');
+        $this->form_validation->set_rules('f_qty', lang("f_qty"), 'required');
+        $this->form_validation->set_rules('mton', lang("mton"), 'required');
+
+        if ($this->form_validation->run() == true) {
+            
+
+            $this->load->model("Purchases_model");
+            $this->load->model("Db_model");
+            $this->load->model("Transfers_model");
+
+            $customer_id = $this->input->post("customer_id");
+            $product = $this->input->post("product");
+            $nat = $this->input->post("nat");
+            $f_qty = $this->input->post("f_qty");
+            $material_cost = $this->input->post("price");
+            $location = $this->input->post("silo");
+            $date_ = date('Y-m-d');
+            $reference = $this->input->post("reference");
+            $current_stock = $this->input->post("current_stock");
+            $temp = $this->input->post("temp");
+            $density = $this->input->post("density");
+            $mton = $this->input->post("mton");
+
+            if ($reference == "") {
+                $reference = gmdate("mdyHis");
+            }
+
+            $data = array(
+                        'reference_no' => $reference,
+                        'customer_id' => $customer_id,
+                        'item_id' => $product,
+                        'loc_id' => $location,
+                        'storage_date' => $date_,
+                        'nat' => $nat,
+                        'f_qty' => $f_qty, 
+                        'temp' => $temp,
+                        'density' => $density,
+                        'mton' => $mton,
+                        'trans_type' => 1
+                    );
+
+            $tp = $this->site->add_third_paty($data);
+        }
+
+        if ($this->form_validation->run() == true && $tp) {
+            $this->session->set_userdata('remove_tols', 1);
+            $this->session->set_flashdata('message', lang("third_party_added"));
+            redirect("/products/third_party");
+        }else{
+
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+            $this->data['density_chart'] = $this->site->getDensityChart();
+            $this->data['warehouses'] = $this->site->getWareHouseLocations();
+            $this->data['customers'] = $this->site->getAllCustomers();
+
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'products/add_third_paty', $this->data);
+        }
+    }
+
     function getProducts($warehouse_id = NULL)
     {
         $this->sma->checkPermissions('index');

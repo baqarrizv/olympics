@@ -138,6 +138,11 @@
 		$this->Text($mcol + 180, sql2date($this->formData['document_date']));
 
 		$this->NewLine();
+		$this->Text($mcol + 100, _("Date"));
+		$this->Text($mcol + 180, sql2date($this->formData['document_date']));
+
+
+		$this->NewLine();
 		$this->Text($mcol + 100, $this->formData['document_name']);
 		$this->Text($mcol + 180, $this->formData['document_number']);
 		$this->NewLine(2);

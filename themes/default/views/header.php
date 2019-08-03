@@ -260,9 +260,14 @@
                                             <i class="fa fa-users"></i><span class="text"> <?= lang('Stock Report'); ?></span>
                                         </a>
                                     </li>
+                                    <li id="third_party">
+                                        <a href="<?= site_url('products/third_party') ?>">
+                                            <i class="fa fa-users"></i><span class="text"> <?= lang('Third Party Stock'); ?></span>
+                                        </a>
+                                    </li>
                                     <li id="daily_dip">
                                         <a href="<?= site_url('products/daily_dip') ?>">
-                                            <i class="fa fa-users"></i><span class="text"> <?= lang('Daily Dip'); ?></span>
+                                            <i class="fa fa-users"></i><span class="text"> <?= lang('Physical Dip'); ?></span>
                                         </a>
                                     </li>
                                 </ul>

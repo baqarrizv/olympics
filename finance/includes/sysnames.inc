@@ -41,6 +41,7 @@ $systypes_array = array (
 	ST_SALESQUOTE => _("Sales Quotation"),
 	ST_COSTUPDATE => _("Cost Update"),
 	ST_DIMENSION => _("Dimension"),
+	TP_STORAGE => _("Third Party Stock")
 	);
 
 $fa_systypes_array = array (
@@ -70,7 +71,8 @@ $type_shortcuts = array(
 	ST_SALESORDER => _("SO"),
 	ST_SALESQUOTE => _("SQ"),
 	ST_COSTUPDATE => _("CU"),
-	ST_DIMENSION => _("Dim")
+	ST_DIMENSION => _("Dim"),
+	TP_STORAGE => _("Tps")
 );
 
 

@@ -24,6 +24,44 @@ class Site extends CI_Model
         return FALSE;
     }
 
+    public function getAllCustomers()
+    {
+        $q = $this->db->get('fin_debtors_master');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function add_third_paty($data)
+    {
+        return $this->db->insert("third_party_stock", $data);
+    }
+
+    public function get_third_party()
+    {
+        $this->db->select('fin_locations.location_name as silo, warehouses.name as location, fin_debtors_master.name as customer, third_party_stock.*, fin_stock_master.description as product');
+        $this->db->join('fin_locations', 'fin_locations.loc_code = third_party_stock.loc_id');
+        $this->db->join('warehouses', 'warehouses.id = fin_locations.warehouse_id', 'LEFT');
+        $this->db->join('fin_debtors_master', 'fin_debtors_master.debtor_no = third_party_stock.customer_id');
+        $this->db->join('fin_stock_master', 'fin_stock_master.stock_id = third_party_stock.item_id');
+        $q = $this->db->get('third_party_stock');
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+
+            return $data;
+        }
+
+        return FALSE;
+    }
+
     public function getWasteData()
     {
 
