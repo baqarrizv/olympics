@@ -18,6 +18,31 @@ class Db_model extends CI_Model
         if ($id != null)
         {
             $this->db->where('fin_sales_orders.order_no', $id);
+        }else{
+            $this->db->where('fin_sales_orders.trans_type', 30);
+        }
+
+        $q = $this->db->get("fin_sales_orders");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
+    public function getThirdPartyReleaseOrders($id = null)
+    {
+        $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch, sma_fin_cust_branch.tax_group_id");
+        $this->db->join('fin_debtors_master', 'fin_debtors_master.debtor_no = fin_sales_orders.debtor_no', 'left');
+        $this->db->join('sma_fin_cust_branch', 'sma_fin_cust_branch.debtor_no = fin_debtors_master.debtor_no', 'left');
+        $this->db->order_by('fin_sales_orders.order_no', 'desc');
+
+        if ($id != null)
+        {
+            $this->db->where('fin_sales_orders.order_no', $id);
+        }else{
+            $this->db->where('fin_sales_orders.trans_type', 41);
         }
 
         $q = $this->db->get("fin_sales_orders");
@@ -190,11 +215,11 @@ class Db_model extends CI_Model
 
     }
 
-    public function get_trans_no()
+    public function get_trans_no($type)
     {
         $this->db->select('MAX(trans_no) as trans_no');
         
-        $q = $this->db->get_where('fin_debtor_trans', array('type' => 13));
+        $q = $this->db->get_where('fin_debtor_trans', array('type' => $type));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data = $row;

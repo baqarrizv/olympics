@@ -20,6 +20,8 @@ class customers_app extends application
 			"sales/sales_order_entry.php?NewQuotation=Yes", 'SA_SALESQUOTE', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Sales &Order Entry"),
 			"sales/sales_order_entry.php?NewOrder=Yes", 'SA_SALESORDER', MENU_TRANSACTION);
+		$this->add_lapp_function(0, _("Release Third Party Stock"),
+			"sales/sales_order_entry.php?ThirdPartyStock=Yes", 'SA_THIRDPARTYSTOCK', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Direct &Delivery"),
 			"sales/sales_order_entry.php?NewDelivery=0", 'SA_SALESDELIVERY', MENU_TRANSACTION);
 		$this->add_lapp_function(0, _("Direct &Invoice"),

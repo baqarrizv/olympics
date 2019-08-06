@@ -39,7 +39,7 @@ function prt_link($row)
 	if (!isset($row['type']))
 		$row['type'] = $_POST['filterType'];
   	if ($row['type'] == ST_PURCHORDER || $row['type'] == ST_SALESORDER || $row['type'] == ST_SALESQUOTE || 
-  		$row['type'] == ST_WORKORDER)
+  		$row['type'] == ST_WORKORDER || $row['type'] == TP_STORAGE)
  		return print_document_link($row['trans_no'], _("Print"), true, $row['type'], ICON_PRINT);
  	else	
 		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
@@ -120,7 +120,8 @@ function handle_search()
 		$print_type = get_post('filterType');
 		$print_out = ($print_type == ST_SALESINVOICE || $print_type == ST_CUSTCREDIT || $print_type == ST_CUSTDELIVERY ||
 			$print_type == ST_PURCHORDER || $print_type == ST_SALESORDER || $print_type == ST_SALESQUOTE ||
-			$print_type == ST_CUSTPAYMENT || $print_type == ST_SUPPAYMENT || $print_type == ST_WORKORDER);
+			$print_type == ST_CUSTPAYMENT || $print_type == ST_SUPPAYMENT || $print_type == ST_WORKORDER ||
+			$print_type == TP_STORAGE);
 
 		$cols = array(
 			_("#") => array('insert'=>true, 'fun'=>'view_link'), 

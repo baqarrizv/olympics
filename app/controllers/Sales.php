@@ -213,14 +213,14 @@ class Sales extends MY_Controller
     {
 
         $this->load->model('Db_model', 'db_model');
-        $get_trans_no = $this->db_model->get_trans_no();
+        $get_trans_no = $this->db_model->get_trans_no(13);
 
         $post = $_POST['data'][0];
 
         $customer_id = $post['debtor_no'];
         $customer = $this->db_model->get_customer($customer_id);
         $delivery_items_total = count($_POST['data']);
-        $freight_tax = $post['freight_cost'];
+        $freight_tax = 0;
         $trans_no = $get_trans_no == null ? 1 : $get_trans_no->trans_no+1;
         $date = date('Y-m-d');
         $branch_code = $post['branch_code'];
@@ -228,27 +228,90 @@ class Sales extends MY_Controller
         $order_no = $post['order_no'];
         $tax_group_id = $post['tax_group_id'];
         $total = 0;
-        $tax_item_id = array();
-        foreach ($post as $item) {
-            $total += $item['this_delivery'] * $item['price'];
-            $tax_item_id[] = $item['tax_type_id'];  
-        }
-        echo json_encode($tax_item_id);
-        exit();
-        
-        $tax_group_details = array();
 
-        $q = $this->db->get_where('sma_fin_tax_group_items', array('tax_group_id' => $tax_group_id));
-        if ($q->num_rows() > 0) {
-            foreach(($q->result()) as $row)
+        $tax_groups = array();
+        $item_codes = array();
+        foreach ($_POST['data'] as $item) {
+            //echo json_encode($item);
+            $total += $item['this_delivery'] * $item['price'];
+            $tax_groups[] = $item['tax_group_id'];  
+            $item_codes[] = $item['item_code'];
+            $freight_tax += $item['freight_cost'];
+        }
+        
+        
+
+        // $get_tax_types = array();
+
+        // $this->db->where_in('tax_group_id', $tax_group_id);
+        // $q = $this->db->get('fin_tax_group_items');
+        // if ($q->num_rows() > 0) {
+        //     foreach(($q->result()) as $row)
+        //     {
+        //         $get_tax_types[] = $row->tax_type_id;
+        //     }
+
+        // }
+
+        $item_tax_types = array();
+
+        $this->db->where_in('stock_id', $item_codes);
+        $query = $this->db->get('fin_stock_master');
+        if ($query->num_rows() > 0) {
+            foreach(($query->result()) as $row)
             {
-                $tax_group_details[] = $row;
+                $item_tax_types[] = $row;
             }
 
         }
 
+        $tax_exempts = array();
+        $ex_q = $this->db->get('sma_fin_item_tax_type_exemptions');
+        if ($ex_q->num_rows() > 0) {
+            foreach(($ex_q->result()) as $row)
+            {
+                $tax_exempts[] = $row->tax_type_id;
+            }
+
+        }
+
+        $tax_rate = array();
+        foreach ($item_tax_types->tax_type_id as $row) {
+            
+            foreach ($tax_exempts as $row_ex) {
+                
+                if ($row_ex != $row) {
+                    
+                    $tax_type = $this->db->get_where('fin_tax_types' , array('id' => $row));
+                    if ($tax_type->num_rows() > 0) {
+                        foreach(($tax_type->result()) as $type_row)
+                        {
+                            $tax_rate[] = $type_row;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        $tax_total = 0;
+
+        foreach ($tax_rate as $rate) {
+            
+            $tax_total  += ($total / 100) * $rate->rate;
+            
+        }
+
+        $include_freight_tax = $tax_total + $freight_tax;
+
+
+
+
+        echo json_encode($_POST['data']);
+        exit();
+
         $this->load->model("Sales_model", "sale");
-        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer, $branch_code, $tax_group_id);
+        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer[0], $branch_code, $total, $tax_total, $freight_tax, $item_tax_types);
     
         // $d = $this->db_model->deliver_sale($this_delivery[$i], $order_no, $stock_id[$i]);
         // $delivery_no = $this->db_model->write_customer_trans(13, $trans_no, $customer_id,
@@ -258,6 +321,8 @@ class Sales extends MY_Controller
         
 
     }
+
+    
 
     public function view($id = null)
     {

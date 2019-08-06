@@ -333,6 +333,7 @@ class Cart
 			case ST_CUSTDELIVERY:
 				$ret = write_sales_delivery($this, $policy); break;
 			case ST_SALESORDER:
+			case TP_STORAGE: //added by yasir
 			case ST_SALESQUOTE:
 				if ($this->trans_no==0)	// new document
 					$ret = add_sales_order($this);

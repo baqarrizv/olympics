@@ -71,6 +71,7 @@ function get_counterparty_name($trans_type, $trans_no, $full=true)
 	switch($trans_type)
 	{
 		case ST_SALESORDER:
+		case TP_STORAGE:
 		case ST_SALESQUOTE:
 			$sql = "SELECT order.customer_id as person_id, debtor.name as name
 			FROM ".TB_PREF."sales_orders order, ".TB_PREF."debtors_master debtor
@@ -205,6 +206,7 @@ function get_systype_db_info($type)
         case     ST_MANUISSUE    : return array(TB_PREF."wo_issues", null, "issue_no", "reference", "issue_date");
         case     ST_MANURECEIVE  : return array(TB_PREF."wo_manufacture", null, "id", "reference", "date_");
         case     ST_SALESORDER   : return array(TB_PREF."sales_orders", "trans_type", "order_no", "reference", "ord_date");
+        case 	 TP_STORAGE      : return array(TB_PREF."sales_orders", "trans_type", "order_no", "reference", "ord_date");
         case     31              : return array(TB_PREF."service_orders", null, "order_no", "cust_ref", "date");
         case     ST_SALESQUOTE   : return array(TB_PREF."sales_orders", "trans_type", "order_no", "reference", "ord_date");
         case	 ST_DIMENSION    : return array(TB_PREF."dimensions", null, "id", "reference", "date_");

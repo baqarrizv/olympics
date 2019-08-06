@@ -59,7 +59,7 @@
 				_("Valid until") => sql2date($this->formData['delivery_date']),
 			);
 			break;
-
+		case TP_STORAGE:
 		case ST_SALESORDER:
 			$this->title = ($this->params['print_quote'] ? _("QUOTE") : ($this->formData['prepaid'] ? _("PREPAYMENT ORDER") : _("SALES ORDER")));
 			$this->formData['document_name'] =_("Order No.");

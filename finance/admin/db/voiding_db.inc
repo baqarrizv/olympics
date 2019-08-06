@@ -115,6 +115,7 @@ function void_transaction($type, $type_no, $date_, $memo_)
 			break;
 
 		case ST_SALESORDER: // it's a sales order
+		case TP_STORAGE: // it's a third party stock
 		case ST_SALESQUOTE: // it's a sales quotation
 			return _('This transaction type cannot be voided.');
 

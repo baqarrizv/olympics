@@ -100,6 +100,7 @@ function exist_transaction($type, $type_no)
 			break;
 
 		case ST_SALESORDER: // it's a sales order
+		case TP_STORAGE: // it's a third party release
 		case ST_SALESQUOTE: // it's a sales quotation
 			return false;
 		case ST_COSTUPDATE : // it's a stock cost update
@@ -152,7 +153,7 @@ function voiding_controls()
 {
 	global $selected_id;
 
-	$not_implemented =  array(ST_PURCHORDER, ST_SALESORDER, ST_SALESQUOTE, ST_COSTUPDATE);
+	$not_implemented =  array(ST_PURCHORDER, ST_SALESORDER, TP_STORAGE, ST_SALESQUOTE, ST_COSTUPDATE);
 
 	start_form();
 

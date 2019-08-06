@@ -37,9 +37,25 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function add_third_paty($data)
+    public function add_third_paty($third_party, $stock_move, $log)
     {
-        return $this->db->insert("third_party_stock", $data);
+        $this->db->trans_start();
+
+            $t_p = $this->db->insert("third_party_stock", $third_party);
+            $this->db->insert("fin_stock_moves", $stock_move);
+            $stock_moves_id = $this->db->insert_id();
+            $log['stock_moves_id'] = $stock_moves_id;
+            $this->db->insert("transaction_logs", $log); 
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === TRUE)
+        {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+            
     }
 
     public function get_third_party()

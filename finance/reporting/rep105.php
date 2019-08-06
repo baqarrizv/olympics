@@ -53,6 +53,7 @@ function GetSalesOrders($from, $to, $category=0, $location=null, $backorder=0)
             	    ON sorder.order_no = line.order_no
             	    AND sorder.trans_type = line.trans_type
             	    AND sorder.trans_type = ".ST_SALESORDER."
+            	    OR sorder.trans_type = ".TP_STORAGE."
             	INNER JOIN ".TB_PREF."stock_master item
             	    ON line.stk_code = item.stock_id
             WHERE sorder.ord_date >='$fromdate'

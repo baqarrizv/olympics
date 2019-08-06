@@ -81,7 +81,7 @@ function get_customer_trans_view_str($type, $trans_no, $label="", $icon=false,
 		$viewer .= "view_receipt.php";
 	elseif ($type == ST_CUSTDELIVERY)
 		$viewer .= "view_dispatch.php";
-	elseif ($type == ST_SALESORDER || $type == ST_SALESQUOTE)
+	elseif ($type == ST_SALESORDER || $type == ST_SALESQUOTE || $type == TP_STORAGE) //added TP_STORAGE by yasir
 		$viewer .= "view_sales_order.php";
 	else
 		return null;
@@ -607,6 +607,10 @@ function display_allocations_to($person_type, $person_id, $type, $type_no, $tota
 		case PT_CUSTOMER :
 			$alloc_result = get_allocatable_from_cust_transactions($person_id, $type_no, $type);
 			display_allocations($alloc_result, $total, $type == ST_SALESORDER ? _("Pre-Payments") : _("Payments"), false);
+			return;
+		case TP_STORAGE : //added by yasir
+			$alloc_result = get_allocatable_from_cust_transactions($person_id, $type_no, $type);
+			display_allocations($alloc_result, $total, $type == TP_STORAGE ? _("Pre-Payments") : _("Payments"), false);
 			return;
 		case PT_SUPPLIER :
 			$alloc_result = get_allocatable_from_supp_transactions($person_id, $type_no, $type);
@@ -1559,6 +1563,7 @@ function trans_editor_link($type, $trans_no)
 		ST_WORKORDER => "/manufacturing/work_order_entry.php?trans_no=%d",
 		ST_SALESORDER => "/sales/sales_order_entry.php?ModifyOrderNumber=%d",
 		ST_SALESQUOTE => "/sales/sales_order_entry.php?ModifyQuotationNumber=%d",
+		TP_STORAGE => "/sales/sales_order_entry.php?ModifyOrderNumber=%d" //added by yasir
 	//   35=> Cost Update,
 	);
 

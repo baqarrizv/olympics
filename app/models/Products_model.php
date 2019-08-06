@@ -178,7 +178,7 @@ class Products_model extends CI_Model
 
     function getDetails($id)
     {
-            $this->db->select("stock.stock_id, stock.description, stock.units, loc.location_name, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as qty, sma_fin_stock_moves.tran_date, sma_fin_stock_moves.reference, wh.name as warehouse, ct.city_name")
+            $this->db->select("stock.stock_id, sma_fin_stock_moves.type, stock.description, stock.units, loc.location_name, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as qty, sma_fin_stock_moves.tran_date, sma_fin_stock_moves.reference, wh.name as warehouse, ct.city_name")
             ->join('sma_fin_locations loc', 'loc.loc_code= sma_fin_stock_moves.loc_code', 'left')
             ->join('sma_warehouses wh', 'wh.id=loc.warehouse_id', 'left')
             ->join('sma_city ct', 'ct.id=wh.city_id', 'left')

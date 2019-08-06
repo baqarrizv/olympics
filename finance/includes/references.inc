@@ -34,6 +34,7 @@ $refline_options = array(
 	ST_CUSTPAYMENT => array('date', 'user'),
 
 	ST_SALESORDER => array('date', 'customer', 'branch', 'user', 'pos'),
+	TP_STORAGE => array('date', 'customer', 'branch', 'user', 'pos'), // added by yasir
 	ST_SALESQUOTE => array('date', 'customer', 'branch', 'user', 'pos'),
 	ST_SALESINVOICE => array('date', 'customer', 'branch', 'user', 'pos'),
 	ST_CUSTCREDIT => array('date', 'customer', 'branch', 'user', 'pos'),

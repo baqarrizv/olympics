@@ -655,8 +655,8 @@ function check_is_editable($trans_type, $trans_no, $msg=null)
 			display_note($msg);
 			display_footer_exit();
 		}
-	}
-	if (!in_array($trans_type, array(ST_SALESORDER, ST_SALESQUOTE, ST_PURCHORDER, ST_WORKORDER)))
+	} //added TP_STORAGE by yasir
+	if (!in_array($trans_type, array(ST_SALESORDER, TP_STORAGE, ST_SALESQUOTE, ST_PURCHORDER, ST_WORKORDER)))
 		check_is_closed($trans_type, $trans_no, $msg);
 }
 

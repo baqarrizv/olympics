@@ -18,6 +18,7 @@
                     <th><?= lang("Product Title"); ?></th>
                     <th><?= lang("UoM"); ?></th>
                     <th><?= lang("Available Qty"); ?></th>
+                    <th><?= lang("Third Party") ?></th>
                     <!-- <th><?= lang("Booked Qty"); ?></th> -->
                     <th><?= lang("Location"); ?></th>
                     <th><?= lang("Warehouse"); ?></th>
@@ -27,6 +28,7 @@
                 <tbody>
                 <?php
                 $s = 1;
+                $tp_qty = 0;
                 foreach($details as $p){
                 ?>
                 <tr>
@@ -35,6 +37,8 @@
                    <td><?= $p->description ?></td>
                    <td><?= $p->units ?></td>
                    <td><?= $p->qty ?></td>
+                   <?php if($p->type == 41) $tp_qty += (int)$p->qty; ?>
+                   <td><?= $p->type ?></td>
                    <!-- <td>0</td> -->
                    <td><?= $p->city_name ?></td>
                    <td><?= $p->warehouse ?></td>

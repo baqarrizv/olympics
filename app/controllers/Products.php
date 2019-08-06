@@ -103,7 +103,17 @@ class Products extends MY_Controller
                 $reference = gmdate("mdyHis");
             }
 
-            $data = array(
+            $this->load->model('Transfers_model', 'transfer');
+            $trans_no = $this->transfer->get_next_trans_no(41);
+
+            $stock = $this->db->get_where('fin_stock_master', array('stock_id' => $product))->row_array();
+            $map_cal = $f_qty * $stock['material_cost'];
+            $map = round($map_cal/$nat);
+
+            $inv_value = $map * $f_qty;
+            $trans_value = $map * $nat;
+
+            $third_prty = array(
                         'reference_no' => $reference,
                         'customer_id' => $customer_id,
                         'item_id' => $product,
@@ -116,8 +126,36 @@ class Products extends MY_Controller
                         'mton' => $mton,
                         'trans_type' => 1
                     );
+            $stock_move = array(
+                        'trans_no' => $trans_no,
+                        'stock_id' => $product,
+                        'type' => 41,
+                        'loc_code' => $location,
+                        'tran_date' => date('Y-m-d'),
+                        'price' => 0,
+                        'reference' => $reference,
+                        'qty' => $f_qty,
+                        'standard_cost' => $stock["material_cost"],
+                    );
 
-            $tp = $this->site->add_third_paty($data);
+            $log = array(
+                        'product_id' => $product,
+                        'stock_moves_id' => 0,
+                        'supplier_id' => 0,
+                        'trans_type' => "Third-Party-Stcok",
+                        'nat_qty' => $nat,
+                        'f_qty' => $f_qty,
+                        'f_value' => 85,
+                        'm_ton_qty' => $mton,
+                        'temp' => $temp,
+                        'density' => $density,
+                        'map' => $map,
+                        'inv_value' => $inv_value,
+                        'trans_value' => $trans_value 
+                    );
+           
+            $tp = $this->site->add_third_paty($third_prty, $stock_move, $log);
+           
         }
 
         if ($this->form_validation->run() == true && $tp) {
@@ -134,6 +172,16 @@ class Products extends MY_Controller
             $this->data['modal_js'] = $this->site->modal_js();
             $this->load->view($this->theme . 'products/add_third_paty', $this->data);
         }
+    }
+
+    public function release_thrid_prty_orders()
+    {
+        $this->load->model("Db_model");
+        $this->data['third_party'] = $this->Db_model->getThirdPartyReleaseOrders();
+
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Third Party Stock Release Order')));
+        $meta = array('page_title' => lang('Third Party Stock Release Order'), 'bc' => $bc);
+        $this->page_construct('products/third_party_release_order', $meta, $this->data);
     }
 
     function getProducts($warehouse_id = NULL)

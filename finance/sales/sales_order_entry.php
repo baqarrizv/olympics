@@ -32,7 +32,9 @@ set_page_security( @$_SESSION['Items']->trans_type,
 	array(	ST_SALESORDER=>'SA_SALESORDER',
 			ST_SALESQUOTE => 'SA_SALESQUOTE',
 			ST_CUSTDELIVERY => 'SA_SALESDELIVERY',
-			ST_SALESINVOICE => 'SA_SALESINVOICE'),
+			ST_SALESINVOICE => 'SA_SALESINVOICE',
+			TP_STORAGE => 'SA_THIRDPARTYSTOCK'),
+
 	array(	'NewOrder' => 'SA_SALESORDER',
 			'ModifyOrderNumber' => 'SA_SALESORDER',
 			'AddedID' => 'SA_SALESORDER',
@@ -46,7 +48,7 @@ set_page_security( @$_SESSION['Items']->trans_type,
 			'AddedDN' => 'SA_SALESDELIVERY', 
 			'NewInvoice' => 'SA_SALESINVOICE',
 			'AddedDI' => 'SA_SALESINVOICE',
-			
+			'ThirdPartyStock' => 'SA_THIRDPARTYSTOCK'
 			)
 );
 
@@ -91,6 +93,12 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 
 	$_SESSION['page_title'] = _($help_context = "New Sales Order Entry");
 	create_cart(ST_SALESORDER, 0);
+
+}elseif (isset($_GET['ThirdPartyStock'])) {
+
+	$_SESSION['page_title'] = _($help_context = "New Third Party Stock Release");
+	create_cart(TP_STORAGE, 0);
+
 } elseif (isset($_GET['NewQuotation'])) {
 
 	$_SESSION['page_title'] = _($help_context = "New Sales Quotation Entry");

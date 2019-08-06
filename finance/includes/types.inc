@@ -35,7 +35,7 @@ define('ST_SUPPRECEIVE', 25);
 define('ST_WORKORDER', 26);
 define('ST_MANUISSUE', 28);
 define('ST_MANURECEIVE', 29);
-define('TP_STORAGE', 101);
+define('TP_STORAGE', 41);
 
 //
 //	Depreciation period types

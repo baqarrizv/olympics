@@ -30,14 +30,96 @@ class Sales_model extends CI_Model
         }
     }
 
-    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer)
+    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer, $branch, $total, $tax_total, $freight_total, $items)
     {
-        foreach ($post as $item) {
-            $total += $item['this_delivery'] * $item['price'];  
-        }
-        
-        return $order_no;
+        $already_exist = $this->exists_customer_trans(13, $trans_no);
 
+        $sql = "INSERT INTO sma_fin_debtor_trans (
+        trans_no, type,
+        debtor_no, branch_code,
+        tran_date, due_date,
+        reference, tpe,
+        order_, ov_amount, ov_discount,
+        ov_gst, ov_freight, ov_freight_tax,
+        rate, ship_via, alloc,
+        dimension_id, dimension2_id, payment_terms, tax_included, prep_amount
+        ) VALUES (".$trans_no.", 13,
+        ".$customer->debtor_no.", ".$branch.",
+        '".date('Y-m-d')."', '".date('Y-m-d')."', ".$reference.",
+        1, ".$order_no.", '".$total."', 0, '".$tax_total."',
+        ".$freight_total.",
+        ".$freight_total.", 1, 1, 0,
+        0, 0, 4, 1, 0";
+
+        $this->db->query($sql);
+        $deb_trans_id = $this->db->insert_id();
+
+        $this->add_audit_trail(13, $trans_no, date('Y-m-d'));
+
+        $index = 0;
+        foreach ($post as $row) {
+            
+            $sql = "INSERT INTO sma_fin_debtor_trans_details (debtor_trans_no,
+                debtor_trans_type, stock_id, description, quantity, unit_price,
+                unit_tax, discount_percent, standard_cost, src_id)
+            VALUES (".$deb_trans_id.", 13, ".$row['item_code'].", ".$items[$index]->description).",
+                '".$row['this_delivery']."', '".$row['price']."', 11.91, 
+                0, '".$row['price']."')";
+
+            $this->db->query($sql);
+
+
+            $update_so = "UPDATE sma_fin_sales_order_details
+                SET qty_sent = qty_sent + $row['this_delivery'] WHERE id=".$order_no;
+
+            $this->db->query($update_so);
+
+            $sql_move = "INSERT INTO ".TB_PREF."stock_moves (stock_id, trans_no, type, loc_code,
+            tran_date, reference, qty, standard_cost, price) VALUES ("
+            .$row['item_code'].", ".$trans_no.", 13, ".$row['loc_code'].", '".date('Y-m-d')."', "
+            .$reference.", ".-$row['this_delivery'].", ".$row['price']."," .$row['price'].")";
+
+            $this->db->query($sql_move);
+
+            $index++;
+
+        }
+
+        
+        return TRUE;
+
+    }
+
+    function add_audit_trail($trans_type, $trans_no, $trans_date, $descr='')
+    {
+        
+        $sql = "INSERT INTO sma_fin_audit_trail(type, trans_no, user, gl_date, description)
+                VALUES(".$trans_type.", ".$trans_no.", 1,".$trans_date.", '')";
+
+        $this->db->query($sql);
+        // all audit records beside just inserted one should have gl_seq set to NULL
+        // to avoid need for subqueries (not existing in MySQL 3) all over the code
+        $ins_id = $this->db->insert_id();
+
+        $sql = "UPDATE sma_fin_audit_trail audit LEFT JOIN sma_fin_fiscal_year year ON year.begin<= '".$trans_date."' AND year.end>= '".$trans_date."'
+            SET audit.gl_seq = IF(audit.id=".$ins_id.", 0, NULL),"
+            ."audit.fiscal_year=year.id, audit.gl_date = '".$trans_date."'"
+            . " WHERE type=".$trans_type." AND trans_no="
+            . $trans_no;
+        
+        return $this->db->query($sql);
+    }
+
+    public function exists_customer_trans($type, $type_no)
+    {
+        $q = $this->db->get_where("fin_debtor_trans", array('type' => $type, 'trans_no' => $type_no));
+
+        if ($q->num_rows() > 0)
+        {
+            return TRUE;
+        }
+
+        return FALSE;
     }
 
     function get_shipping_tax()

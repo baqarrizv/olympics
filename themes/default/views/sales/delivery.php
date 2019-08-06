@@ -4,6 +4,7 @@
 }    
 </style>
     <h2 class="text-center">Delivery Sale Order</h2>
+
     <?php
         
         //exit();
@@ -19,6 +20,7 @@
                 <div class="row bold">
                     <div class="col-xs-5">
                     <p class="bold">
+
                         <?= lang("ref"); ?>: <?= $odr->reference; ?><br>
                         <?= lang("date"); ?>: <?= $this->sma->hrld($odr->ord_date); ?><br>
                         <input type="hidden" name="branch_code" value="<?=$odr->branch_code?>">
@@ -62,7 +64,7 @@
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped print-table order-table">
-
+                   
                     <thead>
                     <tr>
                         <th><?= lang("item_code"); ?></th>
@@ -88,6 +90,7 @@
                                 <input type="text" name="item_code" class="form-control" value="00" readonly="" />
                             </td>
                             <td>
+
 
                                 <select class="form-control item_select">
                                     <option selected="" readonly hidden="">Select Item</option>

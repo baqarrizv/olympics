@@ -42,8 +42,8 @@ function get_payments_for($trans_no, $trans_type, $person_id)
 //
 function allocate_payment($type_from, $no_from, $type_to, $no_to, $person_id, $amount, $date)
 {
-	$date = date2sql($date); // FIXME types
-	if (in_array($type_to, array(ST_SALESORDER, ST_CUSTCREDIT, ST_CUSTDELIVERY, ST_SALESINVOICE)))
+	$date = date2sql($date); // FIXME types //added TP_STORAGE by yasir
+	if (in_array($type_to, array(ST_SALESORDER, TP_STORAGE, ST_CUSTCREDIT, ST_CUSTDELIVERY, ST_SALESINVOICE)))
 		$allocations = 'cust_allocations';
 	else
 		$allocations = 'supp_allocations';

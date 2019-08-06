@@ -214,8 +214,8 @@ class allocation
 
 	 				update_debtor_trans_allocation($alloc_item->type, $alloc_item->type_no, $this->person_id);
 				}
-				// Exchange Variations Joe Hunt 2008-09-20 ////////////////////
-				if ($alloc_item->type != ST_SALESORDER && !@$no_exchange_variations
+				// Exchange Variations Joe Hunt 2008-09-20 //////////////////// //added TP_STORAGE by yasir
+				if ($alloc_item->type != ST_SALESORDER && $alloc_item->type != TP_STORAGE && !@$no_exchange_variations
 					&& $alloc_item->type != ST_PURCHORDER && $alloc_item->type != ST_JOURNAL && $this->type != ST_JOURNAL)
 					exchange_variation($this->type, $this->trans_no,
 						$alloc_item->type, $alloc_item->type_no, $this->date_,

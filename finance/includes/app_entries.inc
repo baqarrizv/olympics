@@ -48,6 +48,7 @@ $trans_editors = array(
 	//ST_MANURECEIVE =>  ,
 
 	ST_SALESORDER => "/sales/sales_order_entry.php?ModifyOrderNumber=%d",
+	TP_STORAGE => 	 "/sales/sales_order_entry.php?ModifyOrderNumber=%d", //added by yasir
 	ST_SALESQUOTE => "/sales/sales_order_entry.php?ModifyQuotationNumber=%d",
 	//ST_COSTUPDATE =>  ,
 	//ST_DIMENSION =>  ,
