@@ -276,13 +276,13 @@ class Sales extends MY_Controller
         }
 
         $tax_rate = array();
-        foreach ($item_tax_types->tax_type_id as $row) {
+        foreach ($item_tax_types as $row) {
             
             foreach ($tax_exempts as $row_ex) {
                 
-                if ($row_ex != $row) {
+                if ($row_ex != $row->tax_type_id) {
                     
-                    $tax_type = $this->db->get_where('fin_tax_types' , array('id' => $row));
+                    $tax_type = $this->db->get_where('fin_tax_types' , array('id' => $row->tax_type_id));
                     if ($tax_type->num_rows() > 0) {
                         foreach(($tax_type->result()) as $type_row)
                         {
@@ -305,13 +305,11 @@ class Sales extends MY_Controller
         $include_freight_tax = $tax_total + $freight_tax;
 
 
-
-
-        echo json_encode($_POST['data']);
-        exit();
-
         $this->load->model("Sales_model", "sale");
-        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer[0], $branch_code, $total, $tax_total, $freight_tax, $item_tax_types);
+        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer[0], $branch_code, $total, $tax_total, $freight_tax, $item_tax_types, $date);
+
+        echo json_encode($sale);
+        exit();
     
         // $d = $this->db_model->deliver_sale($this_delivery[$i], $order_no, $stock_id[$i]);
         // $delivery_no = $this->db_model->write_customer_trans(13, $trans_no, $customer_id,

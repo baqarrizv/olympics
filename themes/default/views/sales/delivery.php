@@ -64,7 +64,7 @@
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped print-table order-table">
-                   
+
                     <thead>
                     <tr>
                         <th><?= lang("item_code"); ?></th>
@@ -136,7 +136,7 @@
                                 foreach ($density_chart as $density) {
                                     $dc[$density->expansion_degree] = $density->gravity;
                                 }
-                                echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), 'id="" style="width:100%;" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" ');
+                                echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), ' style="width:100%;" id="curr_density" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" ');
                                 ?>
                             </td>
                             <td>
@@ -208,8 +208,9 @@
             let curr_outstanding = outstanding - this_delivery;
             let order_no = $('.item_select option:selected').attr('data-orderno');
             let debtor_no = $('#debtor_no').val();
-            let loc_code = $('.whouse').val();
-            let density_orig = $('.density_select').val();
+            let loc_code = $('#powarehouse').val();
+            console.log(loc_code);
+            let density_orig = $('#curr_density').val();
             let freight_cost = $('#freight_cost').val();
             let reference = $('input[name=reference]').val();
             let branch_code = $('input[name=branch_code]').val();

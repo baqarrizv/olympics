@@ -30,63 +30,117 @@ class Sales_model extends CI_Model
         }
     }
 
-    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer, $branch, $total, $tax_total, $freight_total, $items)
+    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer, $branch, $total, $tax_total, $freight_total, $items, $date)
     {
         $already_exist = $this->exists_customer_trans(13, $trans_no);
+        
+        $this->db->trans_start();
+        
 
-        $sql = "INSERT INTO sma_fin_debtor_trans (
-        trans_no, type,
-        debtor_no, branch_code,
-        tran_date, due_date,
-        reference, tpe,
-        order_, ov_amount, ov_discount,
-        ov_gst, ov_freight, ov_freight_tax,
-        rate, ship_via, alloc,
-        dimension_id, dimension2_id, payment_terms, tax_included, prep_amount
-        ) VALUES (".$trans_no.", 13,
-        ".$customer->debtor_no.", ".$branch.",
-        '".date('Y-m-d')."', '".date('Y-m-d')."', ".$reference.",
-        1, ".$order_no.", '".$total."', 0, '".$tax_total."',
-        ".$freight_total.",
-        ".$freight_total.", 1, 1, 0,
-        0, 0, 4, 1, 0";
+        $sql_deb_trans = $this->db->insert("fin_debtor_trans", array(
+                'trans_no' => $trans_no,
+                'type' => 13,
+                'debtor_no' => $customer->debtor_no,
+                'branch_code' => $branch,
+                'tran_date' => $date,
+                'due_date' => $date,
+                'reference' => $reference,
+                'tpe' => 1,
+                'order_' => $order_no,
+                'ov_amount' => $total,
+                'ov_discount' => 0,
+                'ov_gst' => $tax_total,
+                'ov_freight' => $freight_total,
+                'ov_freight_tax' => $freight_total,
+                'rate' => 1,
+                'ship_via' => 1,
+                'alloc' => 0,
+                'dimension_id' => 0,
+                'dimension2_id' => 0,
+                'payment_terms' => 4,
+                'tax_included' => 1,
+                'prep_amount' => 0
 
-        $this->db->query($sql);
-        $deb_trans_id = $this->db->insert_id();
+        ));
 
-        $this->add_audit_trail(13, $trans_no, date('Y-m-d'));
+        $deb_trans_id = $trans_no;
+
+        $this->add_audit_trail(13, $trans_no, $date);
 
         $index = 0;
         foreach ($post as $row) {
             
-            $sql = "INSERT INTO sma_fin_debtor_trans_details (debtor_trans_no,
-                debtor_trans_type, stock_id, description, quantity, unit_price,
-                unit_tax, discount_percent, standard_cost, src_id)
-            VALUES (".$deb_trans_id.", 13, ".$row['item_code'].", ".$items[$index]->description).",
-                '".$row['this_delivery']."', '".$row['price']."', 11.91, 
-                0, '".$row['price']."')";
+            $sql = $this->db->insert("fin_debtor_trans_details", array(
+                    'debtor_trans_no' => $deb_trans_id,
+                    'debtor_trans_type' => 13,
+                    'stock_id' => $row['item_code'],
+                    'description' => $items[$index]->description, 
+                    'quantity' => $row['this_delivery'],
+                    'unit_price' => $row['price'],
+                    'unit_tax' => 11.91, 
+                    'discount_percent' => 0,
+                    'standard_cost' => $row['price'],
+                    'src_id' => 8
+                ));
 
-            $this->db->query($sql);
+            $this->db->set('qty_sent', 'qty_sent+'.$row['this_delivery'], FALSE);
+            $this->db->where('id', $order_no);
+            $this->db->update('fin_sales_order_details');
 
+           
 
-            $update_so = "UPDATE sma_fin_sales_order_details
-                SET qty_sent = qty_sent + $row['this_delivery'] WHERE id=".$order_no;
+            $sql_move = $this->db->insert('fin_stock_moves', array(
+                        'stock_id' => $row['item_code'],
+                        'trans_no' => $trans_no,
+                        'type' => 13,
+                        'loc_code' => $row['loc_code'],
+                        'tran_date' => $date,
+                        'reference' => $reference,
+                        'qty' => -$row['this_delivery'],
+                        'standard_cost' => $row['price'],
+                        'price' => $row['price']
+            ));
 
-            $this->db->query($update_so);
+            $stock_moves_id = $this->db->insert_id();
 
-            $sql_move = "INSERT INTO ".TB_PREF."stock_moves (stock_id, trans_no, type, loc_code,
-            tran_date, reference, qty, standard_cost, price) VALUES ("
-            .$row['item_code'].", ".$trans_no.", 13, ".$row['loc_code'].", '".date('Y-m-d')."', "
-            .$reference.", ".-$row['this_delivery'].", ".$row['price']."," .$row['price'].")";
+            $map_cal = $row['f_qty'] * $row['price'];
+            $map = round($map_cal/$row['this_delivery']);
 
-            $this->db->query($sql_move);
+            $inv_value = $map * $row['f_qty'];
+            $trans_value = $map * $row['this_delivery']; 
+
+            $log = $this->db->insert("transaction_logs", array(
+                        'product_id' => $row['item_code'],
+                        'stock_moves_id' => $stock_moves_id,
+                        'supplier_id' => 0,
+                        'trans_type' => 'Sale',
+                        'nat_qty' => $row['this_delivery'],
+                        'f_qty' => $row['f_qty'],
+                        'f_value' => 85,
+                        'm_ton_qty' => $row['mton'],
+                        'temp' => $row['temp'],
+                        'density' => $row['density'],
+                        'map' => $map,
+                        'inv_value' => $inv_value,
+                        'trans_value' => $trans_value,
+
+                    ));
 
             $index++;
 
         }
 
-        
-        return TRUE;
+        //return $deb_trans_id;
+
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === TRUE)
+        {
+            return TRUE;
+        }else{
+            return FALSE;
+        }
 
     }
 
