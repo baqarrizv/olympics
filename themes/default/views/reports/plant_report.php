@@ -85,21 +85,18 @@
                     <table class="table table-bordered table-hover table-striped table-condensed reports-table" style="font-size: 11px;">
                         <thead>
                         <tr>
-                            <th colspan="5">In Transit</th>  
-                            <th colspan="6">Product Movement</th> 
-                            <th colspan="5">physical stocks</th>
+                            <th colspan="7">Product Movement</th> 
+                            <!-- <th colspan="5">physical stocks</th> -->
                             <th colspan="3">Books Stock</th>
                             <th>Inv Val</th>
                             <th>Trans Val</th>
                             <th>MAP</th>
+                            <th>MAP</th>
                         </tr>
                         <tr>
-                            <th>NAT</th>
-                            <th>85F</th>
-                            <th>MTon</th>
-                            <th>Temp</th>
-                            <th>Density</th>
+                           
                             <!-- Product Movement -->
+                            <th>Date</th>
                             <th>Type</th>
                             <th>NAT</th>
                             <th>85F</th>
@@ -107,11 +104,11 @@
                             <th>Temp</th>
                             <th>Density</th>
                             <!-- Physical -->
-                            <th>NAT</th>
+                            <!-- <th>NAT</th>
                             <th>85F</th>
                             <th>MTon</th>
                             <th>Temp</th>
-                            <th>Density</th>
+                            <th>Density</th> -->
                             <!-- Book -->
                             <th>NAT</th>
                             <th>85F</th>
@@ -119,47 +116,47 @@
                             <!-- Inv val -->
                             <th>PKR</th>
                             <th>PKR</th>
-                            <th>PKR</th>
+                            <th>(NAT)</th>
+                            <th>(85F)</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($movement as $row): ?>
+                        <?php foreach($movement as $row):
+
+                            if ($row->type == 25) {
+                                $type = "Purchase";
+                            }else if ($row->type == 13) {
+                                $type = "Sale";
+                            }else if($row->type == 17){
+                                $type = "Physical Dip";
+                            }else if($row->type == 16){
+                                $type = "Transfer";
+                            }
+                         ?>
                             <tr>
-                                <td>
-                                    <?php if($row->trans_type == "Transfer-In" || $row->trans_type == " Transfer-Out"){ echo $row->nat_qty; } ?>
-                                <td>
-                                    <?php if($row->trans_type == "Transfer-In" || $row->trans_type == " Transfer-Out"){ echo $row->f_qty; } ?>
-                                </td>
-                                <td>
-                                    <?php if($row->trans_type == "Transfer-In" || $row->trans_type == " Transfer-Out"){ echo $row->m_ton_qty; } ?>
-                                </td>
-                                <td>
-                                    <?php if($row->trans_type == "Transfer-In" || $row->trans_type == " Transfer-Out"){ echo $row->temp; } ?>
-                                </td>
-                                <td>
-                                    <?php if($row->trans_type == "Transfer-In" || $row->trans_type == " Transfer-Out"){ echo $row->density; } ?>
-                                </td>
-                                <td><?=$row->type?></td>
-                                <td><?=$row->nat_qty?></td>
-                                <td><?=$row->f_qty?></td>
-                                <td><?=$row->m_ton_qty?></td>
-                                <td><?=$row->temp?></td>
-                                <td><?=$row->density?></td>
+                                <td><?=$row->tran_date?></td>
+                                <td><?=$type?></td>
+                                <td><?=$row->qty?></td>
+                                <td><?=$row->fac_qty?></td>
+                                <td><?=$row->mTon?></td>
+                                <td><?=$row->mTemp?></td>
+                                <td><?=$row->mDens?></td>
                                 
-                                <td><?= $row->trans_type == "Daily Dip" ? $row->nat_qty : '' ?></td>
+                                <!-- <td><?= $row->trans_type == "Daily Dip" ? $row->nat_qty : '' ?></td>
                                 <td><?= $row->trans_type == "Daily Dip" ? $row->f_qty : '' ?></td>
                                 <td><?= $row->trans_type == "Daily Dip" ? $row->m_ton_qty : '' ?></td>
                                 <td><?= $row->trans_type == "Daily Dip" ? $row->temp : '' ?></td>
-                                <td><?= $row->trans_type == "Daily Dip" ? $row->density : '' ?></td>
+                                <td><?= $row->trans_type == "Daily Dip" ? $row->density : '' ?></td> -->
 
                                 <td><?=$row->totalSum?></td>
-                                <td></td>
-                                <td></td>
+                                <td><?=$row->facSum?></td>
+                                <td><?=substr($row->mtonSum, 0, 4)?></td>
 
                                 <td><?=$row->inv_value?></td>
                                 <td><?=$row->trans_value?></td>
                                 <td><?=$row->map?></td>
+                                <td><?=$row->f_map?></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>

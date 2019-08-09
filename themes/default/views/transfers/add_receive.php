@@ -20,9 +20,19 @@
                 <input type="hidden" name="from_warehouse" value="<?=$row->from_warehouse_code?>">
                 <input type="hidden" name="status" value="completed">
                 <input type="hidden" name="product_id" value="<?=$row->product_id?>">
-                <input type="hidden" name="material_cost" id="material_cost" value="0">
+                <input type="hidden" name="material_cost" id="material_cost" value="<?=$row->total?>">
                 <input type="hidden" name="from_warehouse_name" value="<?=$row->from_warehouse_name?>">
                 <input type="hidden" name="to_warehouse_name" value="<?=$row->to_warehouse_name?>">
+                <div class="col-md-12" style="margin-bottom: 20px;">
+                    <label>Stock Recieve In:</label>
+                    <?php
+                        $lc[''] = '';
+                        foreach ($silos as $loc) {
+                            $lc[$loc->loc_code] = $loc->location_name;
+                        }
+                        echo form_dropdown('warehouse', $lc, (isset($_POST['warehouse']) ? $_POST['warehouse'] : ''), 'id="warehouse" style="width:100%;" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" ');
+                    ?>
+                </div>
                     <div class="col-md-12">
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -67,7 +77,7 @@
                                         <?php
                                         $dc[''] = '';
                                         foreach ($density_chart as $density) {
-                                            $dc[$density->expansion_degree] = $density->gravity;
+                                            $dc[$density->id] = $density->gravity;
                                         }
                                         echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), 'id="density" style="width:100%;" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" ');
                                         ?>

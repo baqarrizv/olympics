@@ -58,11 +58,21 @@ class Purchases extends MY_Controller
         //echo "Hellow world";
 
         $this->load->model('Db_model');
-        $this->data['order'] = $this->Db_model->getPurchaseOrders($id);
+        $order = $this->Db_model->getPurchaseOrders($id);
+        $this->data['order'] = $order;
         $this->data['details'] = $this->Db_model->getPurchaseDetails($id);
-        $this->data['warehouses'] = $this->site->getAllWarehouses();
-        $this->data['density_chart'] = $this->site->getDensityChart();
+        $loc_code = $order[0]['into_stock_location'];
         
+        $this->db->select('warehouses.name, fin_locations.warehouse_id');
+        $this->db->join('warehouses', 'warehouses.id = fin_locations.warehouse_id', 'LEFT');
+        $this->db->where('fin_locations.loc_code', $loc_code);
+        $warehouse_id = $this->db->get('fin_locations')->result_array();
+        $w_id = $warehouse_id[0]['warehouse_id'];
+       
+        $this->data['warehouses'] = $this->site->getAllWarehouses($w_id);
+
+        $this->data['density_chart'] = $this->site->getDensityChart();
+        $this->data['loc_on'] = $warehouse_id;
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('purchases')));
         $meta = array('page_title' => lang('PO Recieve'), 'bc' => $bc);
         $this->page_construct('purchases/po_recieve', $meta, $this->data);
@@ -74,47 +84,69 @@ class Purchases extends MY_Controller
         $this->sma->checkPermissions();
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
 
-        $curr_code = $this->input->post('curr_code');
-        $order_no = $this->input->post('order_no');
-        $supplier_id = $this->input->post('supplier_id');
-        $reference = $this->input->post('reference');
-        $location = $this->input->post('into_stock_location');
-        $amount = $this->input->post('amount');
-        $delivery = $this->input->post('this_delivery');
-        $after_waste = $this->input->post('after_waste');
-        $warehouse = $this->input->post('warehouse');
-        $mton = $this->input->post('mton');
-        $temp = $this->input->post('temp');
-        $density = $this->input->post('density_h');
-
-        $date_ = date('Y-m-d');
-
-
-        $this->load->model('Db_model');
-        $rate = $this->Db_model->get_exchange_rate($curr_code);
-        $this->load->model('Purchases_model');
-
-        $data['grn'] = array(
-            'purch_order_no' => $order_no,
-            'supplier_id' => $supplier_id,
-            'reference' => $reference,
-            'loc_code' => $location,
-            'delivery_date' => date('Y-m-d'),
-            'rate' => $rate['rate_sell']
-        );
-
-
-
-        $line_items = $this->Db_model->getPurchaseDetails($order_no);
+        $this->form_validation->set_message('is_natural_no_zero', lang("no_zero_required"));
+        //$this->form_validation->set_rules('reference_no', lang("reference_no"), 'required');
+        $this->form_validation->set_rules('this_delivery[0]', lang("this_delivery") , 'required');
+        $this->form_validation->set_rules('temp[0]', lang("temp") , 'required');
+        $this->form_validation->set_rules('warehouse', lang("warehouse"), 'required');
+        $this->form_validation->set_rules('date', lang("date") , 'required');
         
-        $grn_ = $this->Purchases_model->grn($data['grn'], $line_items, $delivery, $amount, $supplier_id, $after_waste, $mton, $temp, $density, $warehouse, $date_, $location);
-        
-        if ($grn_)
-        {
-            redirect($_SERVER['HTTP_REFERER']);
+
+        if ($this->form_validation->run() == true) {
+
+            $curr_code = $this->input->post('curr_code');
+            $order_no = $this->input->post('order_no');
+            $supplier_id = $this->input->post('supplier_id');
+            $reference = $this->input->post('reference');
+            $location = $this->input->post('into_stock_location');
+            $amount = $this->input->post('amount');
+            $delivery = $this->input->post('this_delivery');
+            $after_waste = $this->input->post('after_waste');
+            $warehouse = $this->input->post('warehouse');
+            $mton = $this->input->post('mton');
+            $temp = $this->input->post('temp');
+            $density = $this->input->post('density_h');
+
+            $date_ = date('Y-m-d');
+
+
+            $this->load->model('Db_model');
+            $rate = $this->Db_model->get_exchange_rate($curr_code);
+            $this->load->model('Purchases_model');
+
+            $data['grn'] = array(
+                'purch_order_no' => $order_no,
+                'supplier_id' => $supplier_id,
+                'reference' => $reference,
+                'loc_code' => $warehouse,
+                'delivery_date' => date('Y-m-d'),
+                'rate' => $rate['rate_sell']
+            );
+
+
+            $line_items = $this->Db_model->getPurchaseDetails($order_no);
+            
+            $grn_ = $this->Purchases_model->grn($data['grn'], $line_items, $delivery, $amount, $supplier_id, $after_waste, $mton, $temp, $density, $warehouse, $date_, $location);
+
+            if ($grn_)
+            {
+                $this->session->set_userdata('remove_tols', 1);
+                $this->session->set_flashdata('message', "GRN has been successfully created!");
+                redirect($_SERVER['HTTP_REFERER']);
+            }else{
+                echo "Something went wrong with your GRN";
+            }
+           
+        }else{
+            echo "Validation Error! Please Fill All Required Fields";
         }
+        
+        // if ($grn_)
+        // {
+        //     
+        // }
 
-        echo "Erro in GRN!";
+        // echo "Erro in GRN!";
 
         
     }

@@ -45,7 +45,7 @@
 
                     <?php
                     $total = $odr['OrderQty'];
-                    echo lang("Location") . ": " . $odr['location_name'] . "<br>" . lang("Sum of qty") . ": " . $odr['OrderQty'];
+                    echo "<b>".lang("Location") . ": " . $loc_on[0]['name'] . "<br>" . lang("Sum of qty") . ": " . $odr['OrderQty'] . "</b>";
                     
                     ?>
                 </div>

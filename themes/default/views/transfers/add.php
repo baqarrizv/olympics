@@ -164,7 +164,7 @@
                 $attrib = array('data-toggle' => 'validator', 'role' => 'form');
                 echo form_open_multipart("transfers/add", $attrib)
                 ?>
-
+ 
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -179,20 +179,20 @@
                         <?php } ?>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <?= lang("reference_no", "ref"); ?>
-                                <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : $rnumber), 'class="form-control input-tip" id="ref"'); ?>
+                                <?= lang("reference_no", "ref");  ?>
+                                <?php echo form_input('reference_no', (isset($_POST['reference_no']) ? $_POST['reference_no'] : 'OPS-'.date('mdyHis')), 'class="form-control input-tip" id="ref"'); ?>
                             </div>
                         </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <?= lang("to_warehouse", "to_warehouse"); ?>
+                                <?= lang("To_Location", "To_Location"); ?>
                                 <?php
-                                $wh[''] = '';
-                                foreach ($warehouses as $warehouse) {
-                                    $wh[$warehouse->loc_code] = $warehouse->location_name;
+                                $lc[''] = '';
+                                foreach ($locations as $loc) {
+                                    $lc[$loc->id] = $loc->city_name." - ".$loc->name;
                                 }
-                                echo form_dropdown('to_warehouse', $wh, (isset($_POST['to_warehouse']) ? $_POST['to_warehouse'] : ''), 'id="to_warehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("to_warehouse") . '" required="required" style="width:100%;" ');
+                                echo form_dropdown('to_warehouse', $lc, (isset($_POST['to_warehouse']) ? $_POST['to_warehouse'] : ''), 'id="to_warehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") .  '" required="required" style="width:100%;" ');
                                 ?>
                             </div>
                         </div>
@@ -230,7 +230,12 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <?= lang("from_warehouse", "from_warehouse"); ?>
-                                            <?php echo form_dropdown('from_warehouse', $wh, (isset($_POST['from_warehouse']) ? $_POST['from_warehouse'] : ''), 'id="from_warehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("from_warehouse") . '" required="required" style="width:100%;" ');
+                                            <?php 
+                                            $wh[''] = '';
+                                            foreach ($warehouses as $warehouse) {
+                                                $wh[$warehouse->loc_code] = $warehouse->location_name;
+                                            }
+                                            echo form_dropdown('from_warehouse', $wh, (isset($_POST['from_warehouse']) ? $_POST['from_warehouse'] : ''), 'id="from_warehouse" class="form-control input-tip select" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("from_warehouse") . '" required="required" style="width:100%;" ');
                                             ?>
                                         </div>
                                     </div>
@@ -287,7 +292,7 @@
                                                     <?php
                                                     $dc[''] = '';
                                                     foreach ($density_chart as $density) {
-                                                        $dc[$density->expansion_degree] = $density->gravity;
+                                                        $dc[$density->id] = $density->gravity;
                                                     }
                                                     echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), 'id="density" style="width:100%;" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" ');
                                                     ?>

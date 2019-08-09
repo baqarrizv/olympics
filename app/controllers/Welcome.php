@@ -43,9 +43,10 @@ class Welcome extends MY_Controller
         }
 
         $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-        $this->data['sales'] = $this->db_model->getLatestSales();
+        $this->data['sales'] = $this->db_model->getCompleteLatestSales();
         //$this->data['quotes'] = $this->db_model->getLastestQuotes();
-        $this->data['purchase_order'] = $this->db_model->getPurchaseOrders();
+        $this->data['purchase_order'] = $this->db_model->getCompletedPurchaseOrders();
+
         // $this->data['purchases'] = $this->db_model->getLatestPurchases();
 
 

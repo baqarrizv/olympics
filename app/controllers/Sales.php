@@ -185,7 +185,7 @@ class Sales extends MY_Controller
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
         
         $this->load->model('Db_model', 'db_model');
-        $this->data['order'] = $this->db_model->getLatestSales($id);
+        $this->data['order'] = $this->db_model->getCompleteLatestSales($id);
         //$this->data['warehouse'] = $this->site->getWarehouseByID($inv->warehouse_id);
         $this->data['rows'] = $this->sales_model->getAllInvoiceItems($id);
 

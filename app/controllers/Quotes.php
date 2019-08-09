@@ -120,7 +120,18 @@ class Quotes extends MY_Controller
         // $this->data['warehouse'] = $this->site->getWarehouseByID($inv->warehouse_id);
         // $this->data['inv'] = $inv;
         $this->load->model('Db_model');
-        $this->data['order'] = $this->Db_model->getPurchaseOrders($quote_id);
+
+        
+        $order = $this->Db_model->getPurchaseOrders($quote_id);
+        $this->data['order'] = $order;
+        $loc_code = $order[0]['into_stock_location'];
+        
+        $this->db->select('warehouses.name, fin_locations.warehouse_id');
+        $this->db->join('warehouses', 'warehouses.id = fin_locations.warehouse_id', 'LEFT');
+        $this->db->where('fin_locations.loc_code', $loc_code);
+        $warehouse_id = $this->db->get('fin_locations')->result_array();
+        $w_id = $warehouse_id[0]['warehouse_id'];
+        $this->data['loc_on'] = $warehouse_id;
         $this->data['details'] = $this->Db_model->getPurchaseDetails($quote_id);
         $this->load->view($this->theme . 'quotes/modal_view', $this->data);
 

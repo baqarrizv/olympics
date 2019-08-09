@@ -687,6 +687,19 @@ function locations_list($name, $selected_id=null, $all_option=false, $submit_on_
 		) );
 }
 
+function warehouse_list($name, $selected_id=null, $all_option=false, $submit_on_change=false, $fixed_asset=false)
+{
+
+	$sql = "SELECT * FROM sma_warehouses";
+
+	return combo_input($name, $selected_id, $sql, 'id', 'name',
+		array(
+			'spec_option' => $all_option === true ? _("All Locations") : $all_option,
+			'spec_id' => ALL_TEXT,
+			'select_submit'=> $submit_on_change
+		) );
+}
+
 function locations_list_cells($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $fixed_asset=false)
 {
 	if ($label != null)
@@ -696,10 +709,28 @@ function locations_list_cells($label, $name, $selected_id=null, $all_option=fals
 	echo "</td>\n";
 }
 
+function warehouse_list_cells($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $fixed_asset=false)
+{
+	if ($label != null)
+		echo "<td>$label</td>\n";
+	echo "<td>";
+	echo warehouse_list($name, $selected_id, $all_option, $submit_on_change, $fixed_asset);
+	echo "</td>\n";
+}
+
+
+
 function locations_list_row($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $fixed_asset=false)
 {
 	echo "<tr><td class='label'>$label</td>";
 	locations_list_cells(null, $name, $selected_id, $all_option, $submit_on_change, $fixed_asset);
+	echo "</tr>\n";
+}
+
+function warehouse_list_row($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $fixed_asset=false)
+{
+	echo "<tr><td class='label'>$label</td>";
+	warehouse_list_cells(null, $name, $selected_id, $all_option, $submit_on_change, $fixed_asset);
 	echo "</tr>\n";
 }
 

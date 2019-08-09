@@ -87,7 +87,12 @@ class Sales_model extends CI_Model
             $this->db->where('id', $order_no);
             $this->db->update('fin_sales_order_details');
 
-           
+            $map_cal = $row['f_qty'] * $row['price'];
+            $map = round($map_cal/$row['this_delivery']);
+            $map_f = round($map_cal/$row['f_qty']);
+
+            $inv_value = $map * $row['f_qty'];
+            $trans_value = $map * $row['this_delivery']; 
 
             $sql_move = $this->db->insert('fin_stock_moves', array(
                         'stock_id' => $row['item_code'],
@@ -98,16 +103,19 @@ class Sales_model extends CI_Model
                         'reference' => $reference,
                         'qty' => -$row['this_delivery'],
                         'standard_cost' => $row['price'],
-                        'price' => $row['price']
+                        'price' => $row['price'],
+                        'f_qty' => $row['f_qty'],
+                        'm_ton' => $row['mton'],
+                        'density' => $row['density'],
+                        'temp' => $row['temp'],
+                        'map' => $map,
+                        'f_map' => $map_f,
+                        'mton_map' => 0 
             ));
 
             $stock_moves_id = $this->db->insert_id();
 
-            $map_cal = $row['f_qty'] * $row['price'];
-            $map = round($map_cal/$row['this_delivery']);
-
-            $inv_value = $map * $row['f_qty'];
-            $trans_value = $map * $row['this_delivery']; 
+            
 
             $log = $this->db->insert("transaction_logs", array(
                         'product_id' => $row['item_code'],

@@ -1359,6 +1359,33 @@ class Products extends MY_Controller
 
     }
 
+    public function searchProductSilo()
+    {
+        $loc = $this->input->post("from_loc");
+        $item = $this->input->post("item");
+
+        $get = $this->db->get_where('fin_locations', array('loc_code' => $loc))->result_array();
+
+        $sql = "SELECT DISTINCT(stock.loc_code), loc.location_name, loc.warehouse_id from sma_fin_stock_moves stock INNER JOIN sma_fin_locations loc ON loc.loc_code = stock.loc_code where stock_id = '".$item."'";
+
+       
+        $result = $this->db->query($sql);
+        if ($result->num_rows() > 0) {
+            foreach (($result->result()) as $row) {
+
+                if ($row->warehouse_id == $get[0]['warehouse_id'])
+                {
+                    $data[] = $row;
+                }
+            }
+        }
+
+   
+
+        echo json_encode($data);
+        
+    }
+
     function daily_dip()
     {
         // $this->sma->checkPermissions();
@@ -1416,14 +1443,36 @@ class Products extends MY_Controller
 
             $map_cal = $f_qty * $price;
             $map = round($map_cal/$nat);
+            $map_f = round($map_cal/$f_qty);
 
             $inv_value = $map * $f_qty;
             $trans_value = $map * $nat;            
 
             $adj_id = $this->Transfers_model->get_next_trans_no(17);
 
-            $stock_move_id = $this->Transfers_model->add_stock_move(17, $product, $adj_id, $location,
-            $date_, $reference, $loss_factor, $material_cost);
+            $movement = array(
+                    'trans_no' => $adj_id,
+                    'stock_id' => $product,
+                    'type' => 17,
+                    'loc_code' => $location,
+                    'tran_date' => $date_,
+                    'price' => $material_cost,
+                    'reference' => $reference,
+                    'qty' => $loss_factor,
+                    'f_qty' => $f_qty,
+                    'm_ton' => $this->input->post("mton"),
+                    'density' => $this->input->post("density"),
+                    'temp' => $this->input->post("temp"),
+                    'map' => $map,
+                    'f_map' => $map_f,
+                    'mton_map' => 0,
+                    'standard_cost' => 0
+            );
+
+            $stock_move_id = $this->Transfers_model->stock_movement($movement);
+
+            // $stock_move_id = $this->Transfers_model->add_stock_move(17, $product, $adj_id, $location,
+            // $date_, $reference, $loss_factor, $material_cost);
 
             
             $data = array(
@@ -1496,7 +1545,7 @@ class Products extends MY_Controller
     function getSilosByLocation()
     {
         $id = $this->input->get("id");
-        $data['silos'] = $this->site->getSilosByLocation($id);
+        $data['silos'] = $this->site->getAllWarehouses($id);
         $data['loc_stock'] = $this->db->select('sma_fin_loc_stock.*, stock.description')->join('sma_fin_stock_master stock', 'stock.stock_id = sma_fin_loc_stock.stock_id', 'left')->get('sma_fin_loc_stock')->result_array();
         echo json_encode($data);
 

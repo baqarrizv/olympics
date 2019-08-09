@@ -31,6 +31,29 @@ class Db_model extends CI_Model
         }
     }
 
+    public function getCompleteLatestSales($id = null)
+    {
+         $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch, sma_fin_cust_branch.tax_group_id");
+        $this->db->join('fin_debtors_master', 'fin_debtors_master.debtor_no = fin_sales_orders.debtor_no', 'left');
+        $this->db->join('sma_fin_cust_branch', 'sma_fin_cust_branch.debtor_no = fin_debtors_master.debtor_no', 'left');
+        $this->db->order_by('fin_sales_orders.order_no', 'desc');
+
+        if ($id != null)
+        {
+            $this->db->where('fin_sales_orders.order_no', $id);
+        }else{
+            $this->db->where('fin_sales_orders.trans_type', 30);
+        }
+
+        $q = $this->db->get("fin_sales_orders");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+
     public function getThirdPartyReleaseOrders($id = null)
     {
         $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch, sma_fin_cust_branch.tax_group_id");
@@ -195,6 +218,49 @@ class Db_model extends CI_Model
         FROM sma_fin_purch_orders as porder
                 LEFT JOIN (
                     SELECT order_no, SUM(quantity_ordered-quantity_received + quantity_ordered-qty_invoiced) isopen
+                    FROM sma_fin_purch_order_details
+                    GROUP BY order_no
+                ) chk ON chk.order_no=porder.order_no,
+                sma_fin_purch_order_details as line, 
+                sma_fin_suppliers as supplier, 
+                sma_fin_locations as location
+        WHERE porder.order_no = line.order_no
+        AND porder.supplier_id = supplier.supplier_id
+        AND location.loc_code = porder.into_stock_location';
+        if($id != null)
+        {
+            $sql .= ' AND porder.order_no = "'.$id.'"';
+        }
+        $sql .= ' GROUP BY porder.order_no';
+
+        return $this->db->query($sql)->result_array();
+
+
+    }
+
+    public function getCompletedPurchaseOrders($id = null)
+    {
+        $sql = 'SELECT 
+        porder.order_no,
+        porder.comments,
+        porder.delivery_address, 
+        porder.reference,
+        porder.supplier_id, 
+        supplier.supp_name, 
+        location.location_name,
+        porder.requisition_no, 
+        porder.ord_date, 
+        supplier.curr_code, 
+        line.unit_price,
+        Sum(line.unit_price*line.quantity_ordered) AS OrderValue,
+        Sum(line.quantity_ordered) AS OrderQty,
+        porder.into_stock_location,
+        chk.isopen,
+        chk.isComp
+        FROM sma_fin_purch_orders as porder
+                LEFT JOIN (
+                    SELECT order_no, SUM(quantity_ordered-quantity_received + quantity_ordered-qty_invoiced) isopen,
+                    SUM(quantity_ordered-quantity_received) isComp
                     FROM sma_fin_purch_order_details
                     GROUP BY order_no
                 ) chk ON chk.order_no=porder.order_no,

@@ -277,22 +277,28 @@ function row_status($x)
                                                     <th><?= $this->lang->line("reference_no"); ?></th>
                                                     <th><?= $this->lang->line("Supplier"); ?></th>
                                                     <th><?= $this->lang->line("Supplier's Reference"); ?></th>
+                                                    <th><?= $this->lang->line("Ordered Qty"); ?></th>
+                                                    <th><?= $this->lang->line("Remaining Qty"); ?></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <?php if (!empty($purchase_order)) {
                                                     $r = 1;
                                                     foreach ($purchase_order as $odr) {
-                                                        echo '<tr id="' . $odr['order_no'] . '" class="quote_link">
-                                                        <td>' . $r . '</td>
-                                                        <td>' . $odr["order_no"] . '</td>
-                                                        <td>' . $odr["ord_date"] . '</td>
-                                                        <td><a href="#">' . $odr["reference"] . '</a></td>
-                                                        <td>' . $odr["supp_name"] . '</td>
-                                                        <td>' . $odr["requisition_no"] . '</td>
-                                                        
-                                                    </tr>';
-                                                        $r++;
+                                                        if ($odr['isComp'] != '0')
+                                                        {
+                                                            echo '<tr id="' . $odr['order_no'] . '" class="quote_link">
+                                                            <td>' . $r . '</td>
+                                                            <td>' . $odr["order_no"] . '</td>
+                                                            <td>' . $odr["ord_date"] . '</td>
+                                                            <td><a href="#">' . $odr["reference"] . '</a></td>
+                                                            <td>' . $odr["supp_name"] . '</td>
+                                                            <td>' . $odr["requisition_no"] . '</td>
+                                                            <td>' . $odr["OrderQty"] . '</td>
+                                                            <td>' . $odr["isComp"] . '</td>
+                                                            </tr>';
+                                                            $r++;
+                                                        }
                                                     }
                                                 } else { ?>
                                                     <tr>
@@ -331,20 +337,24 @@ function row_status($x)
                                                 </thead>
                                                 <tbody>
                                                 <?php if (!empty($purchases)) {
+
                                                     $r = 1;
                                                     foreach ($purchases as $purchase) {
-                                                        echo '<tr id="' . $purchase['id'] . '" class="purchase_link"><td>' . $r . '</td>
-                                                    <td>' . $purchase['created_at'] . '</td>
-                                                    <td><a href="#">' . $purchase['id'] . '</a></td>
-                                                    <td>' . $purchase['supp_name'] . '</td>
-                                                    <td>' . $purchase['nat_qty'] . '</td>
-                                                    <td>' . $purchase['temp'] . '</td>
-                                                    <td>' . $purchase['density'] . '</td>
-                                                    <td>' . $purchase['f_value'] . '</td>
-                                                    <td>' . $purchase['m_ton_qty'] . '</td>
-                                                    
-                                                </tr>';
-                                                        $r++;
+                                                        
+                                                     echo '<tr id="' . $purchase['id'] . '" class="purchase_link"><td>' . $r . '</td>
+                                                        <td>' . $purchase['created_at'] . '</td>
+                                                        <td><a href="#">' . $purchase['id'] . '</a></td>
+                                                        <td>' . $purchase['supp_name'] . '</td>
+                                                        <td>' . $purchase['nat_qty'] . '</td>
+                                                        <td>' . $purchase['temp'] . '</td>
+                                                        <td>' . $purchase['density'] . '</td>
+                                                        <td>' . $purchase['f_value'] . '</td>
+                                                        <td>' . $purchase['m_ton_qty'] . '</td>
+                                                        
+                                                    </tr>';
+                                                    $r++;
+                                                        
+                                                   
                                                     }
                                                 } else { ?>
                                                     <tr>

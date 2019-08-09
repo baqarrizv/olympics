@@ -27,6 +27,7 @@
                         <input type="hidden" name="reference" value="<?= $odr->reference; ?>">
                         <input type="hidden" name="freight_cost" id="freight_cost" value="<?= $odr->freight_cost; ?>">
                         <input type="hidden" name="tax_group_id" value="<?= $odr->tax_group_id; ?>">
+                        <input type="hidden" id="from_location" name="from_location" value="<?=$odr->from_stk_loc;?>">
                     </p>
                     </div>
                    <?= $_SESSION['csrf'] ?>
@@ -119,25 +120,31 @@
                             </td>
                              <td>
                                 <?php
-                                $wh[''] = '';
-                                foreach ($warehouses as $warehouse) {
-                                    $wh[$warehouse->loc_code] = $warehouse->location_name;
-                                }
-                                echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="powarehouse" class="whouse form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;" ');
+                                // $wh[''] = '';
+                                // foreach ($warehouses as $warehouse) {
+                                //     $wh[$warehouse->loc_code] = $warehouse->location_name;
+                                // }
+                                // echo form_dropdown('warehouse', $wh, (isset($_POST['warehouse']) ? $_POST['warehouse'] : $Settings->default_warehouse), 'id="powarehouse" class="whouse form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("warehouse") . '" required="required" style="width:100%;" ');
                                 ?>
+                                <select class="form-control" name="warehouse" id="powarehouse">
+                                    
+                                </select>
                                 
                             </td>
                             <td>
                                 <input type="text" name="temp" class="form-control" value="00">
                             </td>
                             <td>
-                                <?php
-                                $dc[''] = '';
-                                foreach ($density_chart as $density) {
-                                    $dc[$density->expansion_degree] = $density->gravity;
-                                }
-                                echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), ' style="width:100%;" id="curr_density" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" ');
-                                ?>
+                                <select class="form-control density_select" name="density" id="curr_density" required="">
+                                    <?php
+                                    foreach ($density_chart as $density) {
+                                    
+                                    ?>
+                                    <option value="<?=$density->id?>" data-degree="<?=$density->expansion_degree?>"><?=$density->gravity?></option>
+
+                                    <?php } ?>
+                                </select>
+                               
                             </td>
                             <td>
                                 <input type="text" name="f_qty" class="form-control" readonly="" value="00">
@@ -287,12 +294,37 @@
             let ordered = $(this).find(':selected').data('ordered');
             let delivered  = $(this).find(':selected').data('sent');
             let outstanding = $(this).find(':selected').data('outstanding');
+            let from_location = $('#from_location').val();
             //let this_delivery = $(this).parent().parent().find('input[name=this_delivery]').val();
             $(this).parent().parent().find('input[name=item_code]').val(item_code);
             $(this).parent().parent().find('input[name=unit]').val(unit);
             $(this).parent().parent().find('input[name=ordered]').val(ordered);
             $(this).parent().parent().find('input[name=delivered]').val(delivered);
             $(this).parent().parent().find('input[name=outstanding]').val(outstanding);
+
+            $.ajax({
+                url: '<?=base_url()?>products/searchProductSilo',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {from_loc: from_location, item: item_code, token: $('input[name=token]').val()},
+            })
+            .done(function(data) {
+                console.log("success", data);
+                let html = "";
+                $.each(data, function(index, val) {
+                    html += "<option value='"+val.loc_code+"'>"+ val.location_name +"</option>";
+                });
+
+                $('#powarehouse').html();
+                $('#powarehouse').append(html);
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
         });
 
         $('.remove_delivery').click(function(event) {
@@ -306,7 +338,9 @@
             let temp = $(this).parent().parent().find('input[name=temp]').val();
             const vl = 85;
             let delivery = $(this).parent().parent().find('input[name=this_delivery]').val();
-            let density = $(this).val();
+            
+            let density = $('option:selected', this).attr('data-degree');
+            
             console.log(temp+ "__" +delivery);
             //$('#density_h_'+id).val(density);
 
@@ -337,7 +371,13 @@
                 data: {data: deliveryArr, token: $('input[name=token]').val()},
             })
             .done(function(data) {
-                console.log("success", data);
+                if (data)
+                {
+                    location.reload();
+                }else{
+                    alert("Something went wrong!");
+                }
+                
             })
             .fail(function() {
                 console.log("error");

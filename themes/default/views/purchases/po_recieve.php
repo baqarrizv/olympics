@@ -64,6 +64,10 @@
                         <p class="bold"><?= lang("note"); ?>:</p>
                         <div><?= $odr['comments'] ?></div>
                     </div>
+                    <div class="well well-sm">
+                        <p class="bold"><?= lang("Location"); ?>:</p>
+                        <div><?= $loc_on[0]['name'] ?></div>
+                    </div>
                 </div>
             </div>
         <?php } ?>
@@ -113,19 +117,23 @@
                             <td style="text-align:right;"><?= $this->sma->formatQuantity($row['quantity_received']); ?></td>
                             <td style="text-align:right;width:100px;"><?= $ost = $this->sma->formatQuantity($row['quantity_ordered'] - $row['quantity_received']); ?></td>
                             <td style="width: 110px;padding: 0;">
-                                <input class="form-control" type="text" id="delivery_<?=$row['item_code']?>" name="this_delivery[]" value="<?= $ost ?>" />
+                                <input class="form-control" type="text" id="delivery_<?=$row['item_code']?>" name="this_delivery[]" placeholder="<?= $ost ?>" <?php echo $ost == 0.00 ? 'disabled' : '' ?>/>
                             </td>
                             <td style="width: 50px;padding: 0;">
-                                <input class="form-control" type="text" name="temp[]" id="temp_<?=$row['item_code']?>" />
+                                <input class="form-control" type="text" name="temp[]" id="temp_<?=$row['item_code']?>" placeholder="85" <?php echo $ost == 0.00 ? 'disabled' : '' ?>/>
                             </td>
                             <td style="width: 120px;padding: 0;">
-                                <?php
-                                $dc[''] = '';
-                                foreach ($density_chart as $density) {
-                                    $dc[$density->expansion_degree] = $density->gravity;
-                                }
-                                echo form_dropdown('density', $dc, (isset($_POST['density']) ? $_POST['density'] : ''), 'id="den_'.$row["item_code"].'" style="width:100%;" class="density_select form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("density") . '" required="required" data-id="'.$row["item_code"].'"');
-                                ?>
+
+                                <select class="form-control density_select" name="density" id="den_<?=$row["item_code"]?>" required="" data-id="<?=$row["item_code"]?>">
+                                    <?php
+                                    foreach ($density_chart as $density) {
+                                    
+                                    ?>
+                                    <option value="<?=$density->id?>" data-degree="<?=$density->expansion_degree?>"><?=$density->gravity?></option>
+
+                                    <?php } ?>
+                                </select>
+
                                 
                             </td>
                             <td style="width: 80px;">
@@ -137,12 +145,13 @@
                                 <p id="mton_txt_<?=$row['item_code']?>"></p>
                                 <input type="hidden" class="form-control" name="mton[]" id="mton_<?=$row['item_code']?>">
                                 <input type="hidden" name="total_amount" value="<?= $totalAmount ?>">
-                                <input type="hidden" name="amount[]" value="<?= $row['std_cost_unit'] ?>">
+                                <input type="hidden" name="amount[]" value="<?= $row['unit_price'] ?>">
                             </td>
                         </tr>
                         <?php
                         $totalRec += $row['quantity_received'];
                         $totalOs += str_replace(",", "", $ost);
+
                         $r++;
                     endforeach;
                     ?>
@@ -181,8 +190,9 @@
             let temp = $('#temp_'+id).val();
             const vl = 85;
             let delivery = $('#delivery_'+id).val();
-            let density = $(this).val();
-            $('#density_h_'+id).val(density);
+            let density = $('option:selected', this).attr('data-degree');
+            let density_h = $(this).val();
+            $('#density_h_'+id).val(density_h);
 
             if (temp.length == 0 || delivery.length == 0)
             {

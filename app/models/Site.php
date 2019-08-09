@@ -212,8 +212,14 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllWarehouses() {
-        $q = $this->db->get('fin_locations');
+    public function getAllWarehouses($id = null) {
+        if ($id == null) {
+            $this->db->not_like('location_name', 'DEF');
+            $q = $this->db->get('fin_locations');
+        }else{
+            $this->db->not_like('location_name', 'DEF'); 
+            $q = $this->db->get_where('fin_locations', array('warehouse_id' => $id));
+        }
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;

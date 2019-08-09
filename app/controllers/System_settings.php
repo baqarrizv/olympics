@@ -1992,12 +1992,12 @@ class system_settings extends MY_Controller
         $this->datatables
             ->select("c.city_name, wh.name, fin_locations.loc_code, fin_locations.location_name, fin_locations.measure_unit, fin_locations.capacity, move.qty")
             ->from("fin_locations")
-            //->where("parent_id", '0')
             ->join("fin_locations ws", 'ws.loc_code=fin_locations.parent_id', 'left')
             ->join("warehouses wh", 'wh.id=fin_locations.warehouse_id', 'left')
             ->join("city c", 'c.id=wh.city_id', 'left')
             ->join('fin_loc_stock stock', 'stock.loc_code = ws.loc_code', 'left')
             ->join('fin_stock_moves move', 'move.stock_id = stock.stock_id', 'left')
+            
             //->edit_column("map", base_url().'assets/uploads/$1', 'map')
         ->add_column("Actions", "<div class=\"text-center\"><a href='" . site_url('system_settings/edit_warehouse/$1') . "' class='tip' title='" . lang("edit_warehouse") . "' data-toggle='modal' data-target='#myModal'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . lang("delete_warehouse") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . site_url('system_settings/delete_warehouse/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></div>", "id");
         //->unset_column('id')

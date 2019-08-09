@@ -150,7 +150,7 @@ class Products_model extends CI_Model
     public function getSpecificByLoc($id, $loc)
     {
         
-        $query = "SELECT sma_fin_stock_master.units, sma_fin_stock_master.material_cost, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id WHERE sma_fin_stock_master.stock_id = ".$id." AND sma_fin_stock_moves.loc_code = '".$loc."'";
+        $query = "SELECT sma_fin_stock_master.units, sma_fin_stock_master.material_cost, FORMAT(SUM(sma_fin_stock_moves.qty), 2) as total FROM sma_fin_stock_master LEFT JOIN sma_fin_stock_moves ON sma_fin_stock_moves.stock_id = sma_fin_stock_master.stock_id WHERE sma_fin_stock_master.stock_id = '".$id."' AND sma_fin_stock_moves.loc_code = '".$loc."'";
         
        
         $q = $this->db->query($query);

@@ -158,3 +158,41 @@
 					LEFT JOIN sma_fin_voided v ON tbl.`order_no`=v.id AND v.type='41' WHERE ISNULL(v.id) AND tbl.`trans_type`='41' AND `reference` REGEXP '^[0-9]*/2019$'<br><br><br>
 [03-Aug-2019 10:41:51 Europe/Berlin] <b>DATABASE ERROR :</b> cannot retrieve last reference<br>error code : 1146<br>error message : Table 'magma_pos.sma_fin_third_party_stock_release' doesn't exist<br>sql that failed was : SELECT MAX(CAST(SUBSTR(reference, 1,LENGTH(reference)-5) AS UNSIGNED)) FROM `sma_fin_Third_party_stock_release` tbl
 					LEFT JOIN sma_fin_voided v ON tbl.`order_no`=v.id AND v.type='41' WHERE ISNULL(v.id) AND tbl.`trans_type`='41' AND `reference` REGEXP '^[0-9]*/2019$'<br><br><br>
+[09-Aug-2019 14:54:29 Europe/Berlin] <b>DATABASE ERROR :</b> The order cannot be retrieved<br>error code : 1054<br>error message : Unknown column 'loc.location_name' in 'field list'<br>sql that failed was : SELECT po.*, supplier.*, loc.location_name 
+		FROM sma_fin_purch_orders po,sma_fin_suppliers supplier,
+			sma_warehouses loc
+		WHERE po.supplier_id = supplier.supplier_id
+		AND loc.loc_code = into_stock_location
+		AND po.order_no = '3'<br><br><br>
+[09-Aug-2019 14:54:38 Europe/Berlin] <b>DATABASE ERROR :</b> The order cannot be retrieved<br>error code : 1054<br>error message : Unknown column 'loc.location_name' in 'field list'<br>sql that failed was : SELECT po.*, supplier.*, loc.location_name 
+		FROM sma_fin_purch_orders po,sma_fin_suppliers supplier,
+			sma_warehouses loc
+		WHERE po.supplier_id = supplier.supplier_id
+		AND loc.loc_code = into_stock_location
+		AND po.order_no = '9'<br><br><br>
+[09-Aug-2019 14:55:04 Europe/Berlin] <b>DATABASE ERROR :</b> The order cannot be retrieved<br>error code : 1054<br>error message : Unknown column 'loc.location_name' in 'field list'<br>sql that failed was : SELECT po.*, supplier.*, loc.location_name 
+		FROM sma_fin_purch_orders po,sma_fin_suppliers supplier,
+			sma_warehouses loc
+		WHERE po.supplier_id = supplier.supplier_id
+		AND loc.id = into_stock_location
+		AND po.order_no = '9'<br><br><br>
+[09-Aug-2019 14:55:07 Europe/Berlin] <b>DATABASE ERROR :</b> The order cannot be retrieved<br>error code : 1054<br>error message : Unknown column 'loc.location_name' in 'field list'<br>sql that failed was : SELECT po.*, supplier.*, loc.location_name 
+		FROM sma_fin_purch_orders po,sma_fin_suppliers supplier,
+			sma_warehouses loc
+		WHERE po.supplier_id = supplier.supplier_id
+		AND loc.id = into_stock_location
+		AND po.order_no = '9'<br><br><br>
+[09-Aug-2019 22:54:45 Europe/Berlin] <b>DATABASE ERROR :</b> no debtor trans found for given params<br>sql that failed was : SELECT trans.*,ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount AS Total,cust.name AS DebtorName, cust.address, cust.curr_code, cust.tax_id,
+		trans.prep_amount>0 as prepaid,com.memo_ FROM sma_fin_debtor_trans trans
+					LEFT JOIN sma_fin_comments com ON trans.type=com.type AND trans.trans_no=com.id
+					LEFT JOIN sma_fin_shippers ON sma_fin_shippers.shipper_id=trans.ship_via, 
+					sma_fin_debtors_master cust WHERE trans.trans_no='2'
+		AND trans.type='41'
+		AND trans.debtor_no=cust.debtor_no<br><br><br>
+[09-Aug-2019 22:54:48 Europe/Berlin] <b>DATABASE ERROR :</b> no debtor trans found for given params<br>sql that failed was : SELECT trans.*,ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount AS Total,cust.name AS DebtorName, cust.address, cust.curr_code, cust.tax_id,
+		trans.prep_amount>0 as prepaid,com.memo_ FROM sma_fin_debtor_trans trans
+					LEFT JOIN sma_fin_comments com ON trans.type=com.type AND trans.trans_no=com.id
+					LEFT JOIN sma_fin_shippers ON sma_fin_shippers.shipper_id=trans.ship_via, 
+					sma_fin_debtors_master cust WHERE trans.trans_no='2'
+		AND trans.type='41'
+		AND trans.debtor_no=cust.debtor_no<br><br><br>

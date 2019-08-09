@@ -41,7 +41,7 @@ class Reports_model extends CI_Model
 
     public function getMovements()
     {
-        $sql = "SELECT m1.trans_id, m1.type, m1.qty, SUM(m2.qty) AS totalSum, trans.trans_type, trans.nat_qty, trans.f_qty, trans.m_ton_qty, trans.temp, trans.density, trans.map, trans.inv_value, trans.trans_value FROM sma_fin_stock_moves AS m1 INNER JOIN sma_fin_stock_moves AS m2 ON m1.trans_id >= m2.trans_id LEFT JOIN sma_transaction_logs trans ON trans.stock_moves_id = m1.trans_id LEFT JOIN sma_transfers transfer ON transfer.transfer_no = m1.reference GROUP BY m1.trans_id";
+        $sql = "SELECT m1.trans_id, m1.tran_date, m1.f_map, m1.f_qty as fac_qty, m1.m_ton as mTon, chart.gravity as mDens, m1.temp as mTemp, m1.type, m1.qty, SUM(m2.qty) AS totalSum, SUM(m2.f_qty) AS facSum, SUM(m2.m_ton) AS mtonSum, trans.trans_type, trans.nat_qty, trans.f_qty, trans.m_ton_qty, trans.temp, trans.density, trans.map, trans.inv_value, trans.trans_value FROM sma_fin_stock_moves AS m1 INNER JOIN sma_fin_stock_moves AS m2 ON m1.trans_id >= m2.trans_id LEFT JOIN sma_transaction_logs trans ON trans.stock_moves_id = m1.trans_id LEFT JOIN sma_transfers transfer ON transfer.transfer_no = m1.reference LEFT JOIN sma_density_chart chart ON chart.id = m1.density GROUP BY m1.trans_id";
 
         $q = $this->db->query($sql);
 
@@ -56,7 +56,7 @@ class Reports_model extends CI_Model
 
     public function getPlantMovements($plant, $stock)
     {
-        $sql = "SELECT m1.trans_id, m1.type, m1.qty, SUM(m2.qty) AS totalSum, trans.trans_type, trans.nat_qty, trans.f_qty, trans.m_ton_qty, trans.temp, trans.density, trans.map, trans.inv_value, trans.trans_value FROM sma_fin_stock_moves AS m1 INNER JOIN sma_fin_stock_moves AS m2 ON m1.trans_id >= m2.trans_id LEFT JOIN sma_transaction_logs trans ON trans.stock_moves_id = m1.trans_id LEFT JOIN sma_transfers transfer ON transfer.transfer_no = m1.reference WHERE m1.loc_code = '".$plant."' AND m1.stock_id = '".$stock."' GROUP BY m1.trans_id";
+        $sql = "SELECT m1.trans_id, m1.tran_date, m1.f_map, m1.f_qty as fac_qty, m1.m_ton as mTon, chart.gravity as mDens, m1.temp as mTemp, m1.type, m1.qty, SUM(m2.qty) AS totalSum, SUM(m2.f_qty) AS facSum, SUM(m2.m_ton) AS mtonSum, trans.trans_type, trans.nat_qty, trans.f_qty, trans.m_ton_qty, trans.temp, trans.density, trans.map, trans.inv_value, trans.trans_value FROM sma_fin_stock_moves AS m1 INNER JOIN sma_fin_stock_moves AS m2 ON m1.trans_id >= m2.trans_id LEFT JOIN sma_transaction_logs trans ON trans.stock_moves_id = m1.trans_id LEFT JOIN sma_transfers transfer ON transfer.transfer_no = m1.reference LEFT JOIN sma_density_chart chart ON chart.id = m1.density WHERE m1.loc_code = '".$plant."' AND m1.stock_id = '".$stock."' GROUP BY m1.trans_id";
 
         $q = $this->db->query($sql);
 

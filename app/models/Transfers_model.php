@@ -97,6 +97,12 @@ class Transfers_model extends CI_Model
         return FALSE;
     }
 
+    public function stock_movement($data)
+    {
+        $this->db->insert("fin_stock_moves", $data);
+        return $this->db->insert_id();
+    }
+
     public function add_stock_move($type, $stock_id, $trans_no, $location,
     $date, $reference, $quantity, $std_cost, $price=0)
     {
