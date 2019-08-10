@@ -213,10 +213,11 @@ class Sales extends MY_Controller
     {
 
         $this->load->model('Db_model', 'db_model');
-        $get_trans_no = $this->db_model->get_trans_no(13);
 
         $post = $_POST['data'][0];
 
+        $trans_type = $post['trans_type'];
+        $get_trans_no = $this->db_model->get_trans_no($trans_type);
         $customer_id = $post['debtor_no'];
         $customer = $this->db_model->get_customer($customer_id);
         $delivery_items_total = count($_POST['data']);
@@ -237,9 +238,36 @@ class Sales extends MY_Controller
             $tax_groups[] = $item['tax_group_id'];  
             $item_codes[] = $item['item_code'];
             $freight_tax += $item['freight_cost'];
+
+            $tp_sql = "SELECT SUM(qty) as total FROM sma_fin_stock_moves WHERE type = 41 AND loc_code = '".$item['loc_code']."' AND stock_id ='".$item['item_code']."'";
+            $tp_result = $this->db->query($tp_sql)->result_array();
+
+            $third_prty_stock = $tp_result[0]['total'];
+
+            $t_sql = "SELECT SUM(qty) as total FROM sma_fin_stock_moves WHERE type != 41 AND loc_code = '".$item['loc_code']."' AND stock_id ='".$item['item_code']."'";
+            $t_result = $this->db->query($t_sql)->result_array();
+
+            $local_stock = $t_result[0]['total'];
+
+            $input_stock = $item['this_delivery'];
+
+            if ($trans_type == 41)
+            {
+                if ($input_stock > $third_prty_stock)
+                {
+                    echo json_encode(array('status' => 500, 'msg' => 'Stock limit exceeding. Please correct quantity!'));
+                    exit();
+                }
+
+            }else{
+                if ($input_stock > $local_stock)
+                {
+                    echo json_encode(array('status' => 500, 'msg' => 'Stock limit exceeding. Please correct quantity!'));
+                    exit();
+                }
+            }
+
         }
-        
-        
 
         // $get_tax_types = array();
 
@@ -306,7 +334,7 @@ class Sales extends MY_Controller
 
 
         $this->load->model("Sales_model", "sale");
-        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer[0], $branch_code, $total, $tax_total, $freight_tax, $item_tax_types, $date);
+        $sale = $this->sale->delivery_trans($_POST["data"], $trans_no, $reference, $order_no, $customer[0], $branch_code, $total, $tax_total, $freight_tax, $item_tax_types, $date, $trans_type);
 
         echo json_encode($sale);
         exit();

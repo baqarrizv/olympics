@@ -14,6 +14,7 @@
                     <p class="bold">
                         <?= lang("date"); ?>: <?= $this->sma->hrld($odr->ord_date); ?><br>
                         <?= lang("ref"); ?>: <?= $odr->reference; ?><br>
+                        <input type="hidden" name="trans_type" value="<?= $odr->trans_type; ?>">
                     </p>
                     </div>
                     <div class="clearfix"></div>

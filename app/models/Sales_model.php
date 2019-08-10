@@ -30,16 +30,16 @@ class Sales_model extends CI_Model
         }
     }
 
-    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer, $branch, $total, $tax_total, $freight_total, $items, $date)
+    public function delivery_trans($post, $trans_no, $reference, $order_no, $customer, $branch, $total, $tax_total, $freight_total, $items, $date, $trans_type)
     {
-        $already_exist = $this->exists_customer_trans(13, $trans_no);
+        $already_exist = $this->exists_customer_trans($trans_type, $trans_no);
         
         $this->db->trans_start();
         
 
         $sql_deb_trans = $this->db->insert("fin_debtor_trans", array(
                 'trans_no' => $trans_no,
-                'type' => 13,
+                'type' => $trans_type,
                 'debtor_no' => $customer->debtor_no,
                 'branch_code' => $branch,
                 'tran_date' => $date,
@@ -65,14 +65,14 @@ class Sales_model extends CI_Model
 
         $deb_trans_id = $trans_no;
 
-        $this->add_audit_trail(13, $trans_no, $date);
+        $this->add_audit_trail($trans_type, $trans_no, $date);
 
         $index = 0;
         foreach ($post as $row) {
             
             $sql = $this->db->insert("fin_debtor_trans_details", array(
                     'debtor_trans_no' => $deb_trans_id,
-                    'debtor_trans_type' => 13,
+                    'debtor_trans_type' => $trans_type,
                     'stock_id' => $row['item_code'],
                     'description' => $items[$index]->description, 
                     'quantity' => $row['this_delivery'],
@@ -97,7 +97,7 @@ class Sales_model extends CI_Model
             $sql_move = $this->db->insert('fin_stock_moves', array(
                         'stock_id' => $row['item_code'],
                         'trans_no' => $trans_no,
-                        'type' => 13,
+                        'type' => $trans_type,
                         'loc_code' => $row['loc_code'],
                         'tran_date' => $date,
                         'reference' => $reference,
@@ -121,7 +121,7 @@ class Sales_model extends CI_Model
                         'product_id' => $row['item_code'],
                         'stock_moves_id' => $stock_moves_id,
                         'supplier_id' => 0,
-                        'trans_type' => 'Sale',
+                        'trans_type' => $trans_type == 41 ? 'Third Party Release' : 'Sale',
                         'nat_qty' => $row['this_delivery'],
                         'f_qty' => $row['f_qty'],
                         'f_value' => 85,
@@ -139,7 +139,7 @@ class Sales_model extends CI_Model
             $stock_gl_code = $this->db->get_where('fin_stock_master', array('stock_id' => $row['item_code']))->row_array();
 
             $this->db->insert("fin_gl_trans", array(
-                'type' => 13,
+                'type' => $trans_type,
                 'type_no' => $trans_no,
                 'tran_date' => $date,
                 'account' => $stock_gl_code['cogs_account'],
@@ -149,12 +149,12 @@ class Sales_model extends CI_Model
             ));
 
             $this->db->insert("fin_gl_trans", array(
-                'type' => 13,
+                'type' => $trans_type,
                 'type_no' => $trans_no,
                 'tran_date' => $date,
                 'account' => $stock_gl_code['inventory_account'],
                 'memo_' => 'Delivery',
-                'amount' => $total,
+                'amount' => -$total,
 
             ));
 
@@ -168,7 +168,7 @@ class Sales_model extends CI_Model
                     $net_am = $total - $cal_tax;
 
                     $this->db->insert("fin_trans_tax_details", array(
-                        'trans_type' => 13,
+                        'trans_type' => $trans_type,
                         'trans_no' => $trans_no,
                         'tran_date' => $date,
                         'tax_type_id' => $tx->id,

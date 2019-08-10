@@ -132,6 +132,8 @@
                                 $type = "Physical Dip";
                             }else if($row->type == 16){
                                 $type = "Transfer";
+                            }else if($row->type == 41){
+                                $type = "Third Party";
                             }
                          ?>
                             <tr>

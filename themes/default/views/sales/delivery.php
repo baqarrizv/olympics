@@ -3,12 +3,8 @@
     width: 100%;
 }    
 </style>
-    <h2 class="text-center">Delivery Sale Order</h2>
 
-    <?php
-        
-        //exit();
-    ?>
+   
    <?php $total = 0; foreach($order as $odr){ ?>
     <?php
         $attrib = array('data-toggle' => 'validator', 'role' => 'form');
@@ -16,6 +12,7 @@
     ?>
             
 
+        <h2 class="text-center"><?php echo $odr->trans_type == 41 ? 'Deliver Third Party Stock' : 'Delivery Sale Order' ?></h2>
             <div class="well well-sm">
                 <div class="row bold">
                     <div class="col-xs-5">
@@ -28,6 +25,8 @@
                         <input type="hidden" name="freight_cost" id="freight_cost" value="<?= $odr->freight_cost; ?>">
                         <input type="hidden" name="tax_group_id" value="<?= $odr->tax_group_id; ?>">
                         <input type="hidden" id="from_location" name="from_location" value="<?=$odr->from_stk_loc;?>">
+                        <input type="hidden" id="trans_type" name="trans_type" value="<?=$odr->trans_type;?>">
+
                     </p>
                     </div>
                    <?= $_SESSION['csrf'] ?>
@@ -222,13 +221,11 @@
             let reference = $('input[name=reference]').val();
             let branch_code = $('input[name=branch_code]').val();
             let tax_group_id = $('input[name=tax_group_id]').val();
+            let trans_type = $('#trans_type').val();
 
             if (outstanding == 0)
             {
                 alert("No outstanding found!");
-            }else if(this_delivery > outstanding){
-                alert("Wrong delivery!");
-                $(this).parent().parent().find('input[name=this_delivery]').val(outstanding);
             }else
             {
                 let html = '<tr>';
@@ -272,7 +269,7 @@
                 html += '<a href="#" class="remove_delivery"><i class="fa fa-trash"></i></a>';
                 html += '</td>';
                 
-                deliveryArr.push({order_no: order_no, debtor_no: debtor_no, reference: reference, item_code: item_code, ordered: ordered, delivered: delivered, outstanding: outstanding, this_delivery: this_delivery, loc_code: loc_code, temp: temp, density: density_orig, f_qty: f_qty, mton: mton, freight_cost: freight_cost, price: price, branch_code: branch_code, tax_group_id: tax_group_id});
+                deliveryArr.push({order_no: order_no, debtor_no: debtor_no, reference: reference, item_code: item_code, ordered: ordered, delivered: delivered, outstanding: outstanding, this_delivery: this_delivery, loc_code: loc_code, temp: temp, density: density_orig, f_qty: f_qty, mton: mton, freight_cost: freight_cost, price: price, branch_code: branch_code, tax_group_id: tax_group_id, trans_type: trans_type});
                 console.log(deliveryArr);
 
                 $('#tbl_body').prepend(html).hide().fadeIn(1000);
@@ -338,7 +335,7 @@
             let temp = $(this).parent().parent().find('input[name=temp]').val();
             const vl = 85;
             let delivery = $(this).parent().parent().find('input[name=this_delivery]').val();
-            
+
             let density = $('option:selected', this).attr('data-degree');
             
             console.log(temp+ "__" +delivery);
@@ -371,11 +368,15 @@
                 data: {data: deliveryArr, token: $('input[name=token]').val()},
             })
             .done(function(data) {
-                if (data)
-                {
+               
+                if(data.status == 500){
+                    alert(data.msg);
                     location.reload();
-                }else{
-                    alert("Something went wrong!");
+
+                }else {
+
+                    console.log(data);
+
                 }
                 
             })

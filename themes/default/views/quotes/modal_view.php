@@ -9,6 +9,7 @@
             </button>
             <div class="text-center" style="margin-bottom:20px;">
                 <h2>Purchase Order</h2>
+                
             </div>
             <?php if ($logo) { ?>
                 <div class="text-center">
