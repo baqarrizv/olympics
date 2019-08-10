@@ -216,7 +216,7 @@ class Sales extends MY_Controller
 
         $post = $_POST['data'][0];
 
-        $trans_type = $post['trans_type'];
+        $trans_type = $post['trans_type'] == 41 ? $post['trans_type'] : 13;
         $get_trans_no = $this->db_model->get_trans_no($trans_type);
         $customer_id = $post['debtor_no'];
         $customer = $this->db_model->get_customer($customer_id);
