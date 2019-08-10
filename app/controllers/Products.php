@@ -178,7 +178,8 @@ class Products extends MY_Controller
     {
         $this->load->model("Db_model");
         $this->data['third_party'] = $this->Db_model->getThirdPartyReleaseOrders();
-
+        // echo json_encode($this->data['third_party']);
+        // exit();
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Third Party Stock Release Order')));
         $meta = array('page_title' => lang('Third Party Stock Release Order'), 'bc' => $bc);
         $this->page_construct('products/third_party_release_order', $meta, $this->data);
@@ -1438,14 +1439,11 @@ class Products extends MY_Controller
 
             $rate = $this->Db_model->get_exchange_rate('PKR');
 
-            $homeCurr = 1/$rate['rate_sell'];
-            $price = round($material_cost * $homeCurr);
-
-            $map_cal = $f_qty * $price;
+            $map_cal = $f_qty * $material_cost;
             $map = round($map_cal/$nat);
             $map_f = round($map_cal/$f_qty);
 
-            $inv_value = $map * $f_qty;
+            $inv_value = $map_f * $f_qty;
             $trans_value = $map * $nat;            
 
             $adj_id = $this->Transfers_model->get_next_trans_no(17);
@@ -1458,9 +1456,9 @@ class Products extends MY_Controller
                     'tran_date' => $date_,
                     'price' => $material_cost,
                     'reference' => $reference,
-                    'qty' => $loss_factor,
-                    'f_qty' => $f_qty,
-                    'm_ton' => $this->input->post("mton"),
+                    'qty' => $loss_nat,
+                    'f_qty' => $loss_factor,
+                    'm_ton' => $loss_mton,
                     'density' => $this->input->post("density"),
                     'temp' => $this->input->post("temp"),
                     'map' => $map,

@@ -125,14 +125,33 @@ class Purchases extends MY_Controller
 
 
             $line_items = $this->Db_model->getPurchaseDetails($order_no);
+            $currIndex = 0;
+            foreach ($line_items as $value) {
+                
+                $remaining = $value['quantity_ordered'] - $value['quantity_received'];
+                $this_qty = $delivery[$currIndex];
+
+                if ($this_qty > $remaining) {
+                    # code...
+                    echo "This delivery is greater than outstanding!";
+                    exit();
+                }
+
+                $currIndex++;
+
+            }
+
             
             $grn_ = $this->Purchases_model->grn($data['grn'], $line_items, $delivery, $amount, $supplier_id, $after_waste, $mton, $temp, $density, $warehouse, $date_, $location);
+
 
             if ($grn_)
             {
                 $this->session->set_userdata('remove_tols', 1);
                 $this->session->set_flashdata('message', "GRN has been successfully created!");
-                redirect($_SERVER['HTTP_REFERER']);
+                echo "GRN has been created!";
+                header( "Refresh:2; url=".base_url()."/purchases/po_recieve/".$order_no, true, 303);
+                // redirect('/');
             }else{
                 echo "Something went wrong with your GRN";
             }

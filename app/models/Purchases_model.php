@@ -29,12 +29,15 @@ class Purchases_model extends CI_Model
         //$this->db->trans_begin();
         //try {
 
+        $item_count =  count($line_items);
+        // exit();
+
         $this->db->trans_start();
         // $this->db->trans_strict(FALSE);
         $total = 0;
         $grn = $this->db->insert('fin_grn_batch', $data);
         $grn_id = $this->db->insert_id();
-        for ($i = 0; $i < count($line_items); $i++) {
+        for ($i = 0; $i < $item_count; $i++) {
             
             $dlvry = str_replace(",", "", $delivery[$i]);
             $amnt = str_replace(",", "", $amount[$i]);

@@ -262,7 +262,7 @@
                                     </li>
                                     <li id="third_party">
                                         <a href="<?= site_url('products/third_party') ?>">
-                                            <i class="fa fa-users"></i><span class="text"> <?= lang('Third Party Stock'); ?></span>
+                                            <i class="fa fa-users"></i><span class="text"> <?= lang('Third Party'); ?></span>
                                         </a>
                                     </li>
                                     <li id="third_party">

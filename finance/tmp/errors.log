@@ -196,3 +196,12 @@
 					sma_fin_debtors_master cust WHERE trans.trans_no='2'
 		AND trans.type='41'
 		AND trans.debtor_no=cust.debtor_no<br><br><br>
+[10-Aug-2019 10:54:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[10-Aug-2019 10:54:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[10-Aug-2019 10:54:05 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[10-Aug-2019 10:54:08 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[10-Aug-2019 10:54:08 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[10-Aug-2019 10:54:08 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed
+[10-Aug-2019 10:54:12 Europe/Berlin] 0:admin:gl_db_rates.inc:145: failed loading cafile stream: `F:\xampp\apache\bin\curl-ca-bundle.crt'
+[10-Aug-2019 10:54:12 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(): Failed to enable crypto
+[10-Aug-2019 10:54:12 Europe/Berlin] 0:admin:gl_db_rates.inc:145: file_get_contents(https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml): failed to open stream: operation failed

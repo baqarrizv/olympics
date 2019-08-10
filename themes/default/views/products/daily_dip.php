@@ -37,10 +37,10 @@
                         <tr>
 
                             <th><?= lang("S.No"); ?></th>
+                            <th><?= lang("Date"); ?></th>
                             <th><?= lang("Warehouse"); ?></th>
                             <th><?= lang("Silo"); ?></th>
                             <th><?= lang("Product"); ?></th>
-                            <th><?= lang("Date"); ?></th>
                             <th><?= lang("Reference No"); ?></th>
                             <th><?= lang("NAT"); ?></th>
                             <th><?= lang("85F"); ?></th>
@@ -54,10 +54,10 @@
                             ?>
                             <tr>
                                 <td><?=$i?></td>
+                                <td><?=$dip->tran_date?></td>
                                 <td><?=$dip->warehouse_name?></td>
                                 <td><?=$dip->location_name?></td>
                                 <td><?=$dip->product_name?></td>
-                                <td><?=$dip->tran_date?></td>
                                 <td><?=$dip->reference?></td>
                                 <td><?=$dip->nat_qty?></td>
                                 <td><?=$dip->f_qty?></td>

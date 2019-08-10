@@ -134,6 +134,56 @@ class Sales_model extends CI_Model
 
                     ));
 
+            $this->db->select("mb_flag, inventory_account, cogs_account, adjustment_account, sales_account, wip_account, dimension_id, dimension2_id, material_cost");
+            
+            $stock_gl_code = $this->db->get_where('fin_stock_master', array('stock_id' => $row['item_code']))->row_array();
+
+            $this->db->insert("fin_gl_trans", array(
+                'type' => 13,
+                'type_no' => $trans_no,
+                'tran_date' => $date,
+                'account' => $stock_gl_code['cogs_account'],
+                'memo_' => 'Delivery',
+                'amount' => $total,
+
+            ));
+
+            $this->db->insert("fin_gl_trans", array(
+                'type' => 13,
+                'type_no' => $trans_no,
+                'tran_date' => $date,
+                'account' => $stock_gl_code['inventory_account'],
+                'memo_' => 'Delivery',
+                'amount' => $total,
+
+            ));
+
+            $get_taxes = $this->db->get_where('fin_tax_types', array('inactive' => 0));
+
+            if ($get_taxes->num_rows() > 0)
+            {
+               foreach (($get_taxes->result()) as $tx) {
+
+                    $cal_tax = ($total / 100) * $tx->rate;
+                    $net_am = $total - $cal_tax;
+
+                    $this->db->insert("fin_trans_tax_details", array(
+                        'trans_type' => 13,
+                        'trans_no' => $trans_no,
+                        'tran_date' => $date,
+                        'tax_type_id' => $tx->id,
+                        'rate' => $tx->rate,
+                        'ex_rate' => 1,
+                        'included_in_price' => 1,
+                        'net_amount' => $net_am,
+                        'amount' => $cal_tax,
+                        'memo' => $date 
+
+                    ));
+
+               }
+            }
+
             $index++;
 
         }

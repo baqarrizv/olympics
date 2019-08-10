@@ -196,7 +196,7 @@ class Products_model extends CI_Model
 
     function getAllDip()
     {
-        $q = 'SELECT stock.description as product_name, stock_move.*, location.location_name, warehouse.name as warehouse_name, transactions.* FROM sma_transaction_logs transactions LEFT JOIN sma_fin_stock_moves stock_move ON stock_move.trans_id=transactions.stock_moves_id LEFT JOIN sma_fin_locations location ON location.loc_code=stock_move.loc_code LEFT JOIN sma_warehouses warehouse ON warehouse.id=location.warehouse_id LEFT JOIN sma_fin_stock_master stock ON transactions.product_id = stock.stock_id WHERE transactions.trans_type = "Daily Dip" OR transactions.trans_type = "Loss Gain" ORDER BY transactions.id DESC';
+        $q = 'SELECT stock.description as product_name, stock_move.*, location.location_name, warehouse.name as warehouse_name, transactions.* FROM sma_transaction_logs transactions LEFT JOIN sma_fin_stock_moves stock_move ON stock_move.trans_id=transactions.stock_moves_id LEFT JOIN sma_fin_locations location ON location.loc_code=stock_move.loc_code LEFT JOIN sma_warehouses warehouse ON warehouse.id=location.warehouse_id LEFT JOIN sma_fin_stock_master stock ON transactions.product_id = stock.stock_id WHERE transactions.trans_type = "Daily Dip" ORDER BY transactions.id DESC';
 
         $q = $this->db->query($q);
         if ($q->num_rows() > 0) {

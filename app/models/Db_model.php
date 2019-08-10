@@ -59,7 +59,7 @@ class Db_model extends CI_Model
         $this->db->select("fin_sales_orders.*, fin_debtors_master.name as deb_name, sma_fin_cust_branch.branch_code as branch, sma_fin_cust_branch.tax_group_id");
         $this->db->join('fin_debtors_master', 'fin_debtors_master.debtor_no = fin_sales_orders.debtor_no', 'left');
         $this->db->join('sma_fin_cust_branch', 'sma_fin_cust_branch.debtor_no = fin_debtors_master.debtor_no', 'left');
-        $this->db->order_by('fin_sales_orders.order_no', 'desc');
+        // $this->db->order_by('fin_sales_orders.order_no', 'desc');
 
         if ($id != null)
         {

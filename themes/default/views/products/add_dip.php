@@ -71,13 +71,16 @@
                     <div class="col-md-2">
                         <label class="control-label" for="density"><?php echo $this->lang->line("Density"); ?>
                         </label>
-                        <?php
-                        $dn[''] = '';
-                        foreach ($density_chart as $den) {
-                            $dn[$den->expansion_degree] = $den->gravity;
-                        }
-                        echo form_dropdown('density', $dn, (isset($_POST['density']) ? $_POST['density'] : ($den ? $den->expansion_degree : '')), 'class="form-control select" id="density" placeholder="' . lang("select") . " " . lang("density") . '" required="required" style="width:100%"')
-                        ?>
+                        
+                        <select class="form-control select" name="density" id="density" required="" data-id="<?=$row["item_code"]?>">
+                            <?php
+                            foreach ($density_chart as $density) {
+                            
+                            ?>
+                            <option value="<?=$density->id?>" data-degree="<?=$density->expansion_degree?>"><?=$density->gravity?></option>
+
+                            <?php } ?>
+                        </select>
                     </div>
                     <div class="col-md-2">
                         <label class="control-label" for="factor"><?php echo $this->lang->line("85 F"); ?>
@@ -184,7 +187,7 @@
         $('#density').change(function(event) {
             let nat = $('#nat').val();
             let temp = $('#temp').val();
-            let density = $(this).val();
+            let density = $('option:selected', this).attr('data-degree');
             const vl = 85;
 
             
